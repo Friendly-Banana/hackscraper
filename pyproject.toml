@@ -1,0 +1,12 @@
+[project]
+name = "hackscrape"
+version = "0.1.0"
+description = "Hackathon finder"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "beautifulsoup4>=4.13.3",
+    "huggingface-hub>=0.29.1",
+    "requests>=2.32.3",
+    "transformers>=4.49.0",
+]
