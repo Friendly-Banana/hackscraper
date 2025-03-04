@@ -1,0 +1,809 @@
+
+
+
+
+
+
+
+
+
+
+
+	
+			
+<div class="main-full-height">
+	<form id="filter-form" s-method="post" s-replace="#event-results" s-indicator="#event-loading" s-trigger="filterUpdate" sprig data-hx-select="#event-results" data-hx-target="#event-results" data-hx-swap="outerHTML" data-hx-indicator="#event-loading" data-hx-trigger="filterUpdate" data-hx-headers="{&quot;X-CSRF-Token&quot;:&quot;cixrH01hOrRyVep6Q0zDMVL6VL_5jvnk35V5NrymcFzwebAUzifZbDtdLFQ6BV_XGRbdNRkrimIGtz3ruuWKp-b2HUT5zzkUqBDFfoB47xg=&quot;}" data-hx-post="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+		<input type="hidden" name="reset" value="false">
+		<section id="events-filter" class="events-filter section p-0">
+			<div class="container">
+				<div class="filter-menu">
+					<nav class="filter-nav">
+						<div class="filter-input">
+							<div class="filter-input-search">
+								<div class="filter-input-icon">
+									<svg class="svg-icon c-primary-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" height="20" width="20">
+										<path stroke="#000000" d="M0.8333333333333334 9.166666666666668c0 2.210166666666667 0.877975 4.329750000000001 2.440775 5.8925833333333335C4.836916666666666 16.622 6.956533333333334 17.5 9.166666666666668 17.5c2.210166666666667 0 4.329750000000001 -0.8780000000000001 5.8925833333333335 -2.44075C16.622 13.496416666666667 17.5 11.376833333333334 17.5 9.166666666666668c0 -2.2101333333333333 -0.8780000000000001 -4.329750000000001 -2.44075 -5.892558333333334C13.496416666666667 1.7113083333333334 11.376833333333334 0.8333333333333334 9.166666666666668 0.8333333333333334 6.956533333333334 0.8333333333333334 4.836916666666666 1.7113083333333334 3.2741083333333334 3.2741083333333334 1.7113083333333334 4.836916666666666 0.8333333333333334 6.956533333333334 0.8333333333333334 9.166666666666668Z" stroke-width="2"></path>
+										<path stroke="#000000" d="m15 15 4.166666666666667 4.166666666666667" stroke-width="2"></path>
+									</svg>
+								</div>
+								<input type="text" class="filter-input-field" name="search" value placeholder="Search ..." s-trigger="keyup changed delay:600ms" sprig data-hx-trigger="keyup changed delay:600ms" data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+							</div>
+						</div>
+						<div class="filter-dropdown navbar-menu-dropdown">
+							<a
+								class="filter-link navbar-menu-link d-flex dropdown-toggle"
+								role="button"
+								id="labsDropdown"
+								data-bs-toggle="dropdown"
+								data-bs-auto-close="outside"
+								aria-expanded="false"
+							>
+								<div class="text">Labs</div>
+								<div class="dropdown-icon">
+									<svg class="bi bi-chevron-down svg-icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>
+								</div>
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="labsDropdown">
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="labs[]" value="34" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Additive Manufacturing</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="labs[]" value="45" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Aerospace</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="labs[]" value="50" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Built Environment</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="labs[]" value="74" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">ChemSPACE</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="labs[]" value="37" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Food / Agro / Biotech</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="labs[]" value="78" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Healthcare</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="labs[]" value="107" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Legal Tech Colab</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="labs[]" value="57110" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Mobility</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="labs[]" value="66" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Quantum / Semicon</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="labs[]" value="62" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Robotics / AI</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="labs[]" value="1834" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Software &amp; AI / Heilbronn</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="labs[]" value="82" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Software &amp; AI / Munich</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="labs[]" value="76846" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Sustainability / Circular</span>
+		</label>
+	</tum-filter>
+
+									</li>
+															</ul>
+						</div>
+						<div class="filter-dropdown navbar-menu-dropdown">
+							<a
+								class="filter-link navbar-menu-link d-flex dropdown-toggle"
+								role="button"
+								data-bs-toggle="dropdown"
+								data-bs-auto-close="outside"
+								aria-expanded="false"
+							>
+								<div class="text">Format</div>
+								<div class="dropdown-icon">
+									<svg class="bi bi-chevron-down svg-icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>
+								</div>
+							</a>
+							<ul class="dropdown-menu">
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventFormats[]" value="66988" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Conference/Summit</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventFormats[]" value="67141" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Expert Session</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventFormats[]" value="66985" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Festival</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventFormats[]" value="66989" checked sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Hackathon</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventFormats[]" value="66986" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Keynote</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventFormats[]" value="66991" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Meet-Up</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventFormats[]" value="66990" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Networking</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventFormats[]" value="66992" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Open House</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventFormats[]" value="66987" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Panel Discussion</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventFormats[]" value="66993" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Pitch Event</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventFormats[]" value="66984" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Trade Fair</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventFormats[]" value="67117" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Workshop</span>
+		</label>
+	</tum-filter>
+
+									</li>
+															</ul>
+						</div>
+						<div class="filter-dropdown navbar-menu-dropdown">
+							<a
+								class="filter-link navbar-menu-link d-flex dropdown-toggle"
+								id="typesDropdown"
+								role="button"
+								data-bs-toggle="dropdown"
+								data-bs-auto-close="outside"
+								aria-expanded="false"
+							>
+								<div class="text">Type</div>
+								<div class="dropdown-icon">
+									<svg class="bi bi-chevron-down svg-icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708"/></svg>
+								</div>
+							</a>
+							<ul class="dropdown-menu">
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventTypes[]" value="66982" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Hybrid</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventTypes[]" value="66983" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Online</span>
+		</label>
+	</tum-filter>
+
+									</li>
+																	<li>
+										
+	<tum-filter>
+		<label class="input-check dropdown-item filter-item">
+			<input type="checkbox" class="check-field form-check-input" name="eventTypes[]" value="66981" sprig data-hx-get="https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render" data-sprig-parsed>
+			<span class="check-label">Onsite</span>
+		</label>
+	</tum-filter>
+
+									</li>
+															</ul>
+						</div>
+						<button class="btn btn-primary btn-apply" type="submit">
+							<span class="text">Apply Filter</span>
+						</button>
+					</nav>
+				</div>
+			</div>
+		</section>
+
+		<tum-loader class="loader" id="event-loading">
+			<div class="container">
+				<div class="loader-body py-default">
+					<svg class="loader-icon animation-spin" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke-width="2"><circle stroke="#ECF5FD" cx="10" cy="10" r="9"/><path d="M10 19a9 9 0 1 0-6.364-2.636" stroke="#3070B3"/></g></svg>
+					<span class="loader-text">Loading</span>
+				</div>
+			</div>
+		</tum-loader>
+	</form>
+
+	<div class="results" id="event-results">
+		<!-- Labs:  -->
+		<!-- Types:  -->
+		<!-- eventFormats: 66989 -->
+					<section id="filters-list" class="filters-list fs-15 my-15">
+				<div class="container">
+					<div class="grid gap-10">
+						<tum-filter-remove class="col-auto">
+							<button class="filter-pill filter-remove-all" role="button" data-type="reset" data-target="#filter-form">Clear</button>
+						</tum-filter-remove>
+																																																																																																																																																																																																																																											<tum-filter-remove class="col-auto">
+									<button class="filter-pill filter-remove-one" role="button" data-type="input" data-name="eventFormats[]" data-value="66989">Hackathon</button>
+								</tum-filter-remove>
+																																																																																																																																																																							</div>
+				</div>
+			</section>
+				<section id="events-list" class="section">
+			<div class="container">
+				<div class="grid">
+											
+			
+
+
+
+	<div class="col-12 sm:col-6 lg:col-4" style="--theme-color: #6baedb;">
+		<div class="tile event-tile  stretched-link-container">
+			<div class="tile-image">
+				<!-- Mode: crop, Ratio: 1 --><tum-image class="frame   " style="--ratio: 1"><picture class="picture"><source
+						srcset="https://www.tum-venture-labs.de/transforms/images/Labs/Robotics-AI/Robotics-AI-pictures/_568x568_crop_center-center_90_none/107634/VL-RAI-hackathon_2025_1080x1080.webp?v=1739270996 568w, https://www.tum-venture-labs.de/transforms/images/Labs/Robotics-AI/Robotics-AI-pictures/_447x447_crop_center-center_90_none/107634/VL-RAI-hackathon_2025_1080x1080.webp?v=1739270996 447w, https://www.tum-venture-labs.de/transforms/images/Labs/Robotics-AI/Robotics-AI-pictures/_894x894_crop_center-center_90_none/107634/VL-RAI-hackathon_2025_1080x1080.webp?v=1739270996 894w"
+						type="image/webp"
+
+													sizes="(max-width: 900px) 80vw, 447px"
+											><img
+						class="img img-w-100 js-lazyload"
+						width="568"
+						height="568"
+						src="https://www.tum-venture-labs.de/transforms/images/Labs/Robotics-AI/Robotics-AI-pictures/_568x568_crop_center-center_90_none/107634/VL-RAI-hackathon_2025_1080x1080.webp?v=1739270996"
+						srcset="https://www.tum-venture-labs.de/transforms/images/Labs/Robotics-AI/Robotics-AI-pictures/_568x568_crop_center-center_90_none/107634/VL-RAI-hackathon_2025_1080x1080.webp?v=1739270996 568w, https://www.tum-venture-labs.de/transforms/images/Labs/Robotics-AI/Robotics-AI-pictures/_447x447_crop_center-center_90_none/107634/VL-RAI-hackathon_2025_1080x1080.webp?v=1739270996 447w, https://www.tum-venture-labs.de/transforms/images/Labs/Robotics-AI/Robotics-AI-pictures/_894x894_crop_center-center_90_none/107634/VL-RAI-hackathon_2025_1080x1080.webp?v=1739270996 894w"
+
+													alt="VL RAI hackathon 2025 1080x1080"
+						
+													sizes="(max-width: 900px) 80vw, 447px"
+						
+													loading="lazy"
+											></picture></tum-image>
+				<div class="comb-element p-15">
+					<svg class="comb-icon" height="20" viewBox="0 0 25 20" width="25"
+					     xmlns="http://www.w3.org/2000/svg">
+						<path d="m24 10-6 10h-12l-6-10 6-10h12z" fill="currentColor"
+						      fill-rule="evenodd"/>
+					</svg>
+					<span class="comb-text fs-15">
+						Robotics / AI
+											</span>
+				</div>
+			</div>
+			<div class="tile-body pt-20 md:pt-30">
+				<h3 class="col-auto mr-auto | fw-bold">
+					<a href="https://www.tum-venture-labs.de/events/robo-innovate-hackathon-2025/"
+					   class="link-ghost stretched-link">robo.innovate Hackathon 2025</a>
+				</h3>
+				<p class="fw-bold | c-neutral-muted">
+					Monday, March 17, 2025
+					
+				</p>
+				<p class="mt-15 fs-15">
+					<button type="button" class="btn btn-comb">
+						<span class="sticker comb">
+							<svg class="svg-icon" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke-linejoin="round" stroke="#000" stroke-width="2"><path d="m14 15 5-5-5-5M0 10h19.167"/></g></svg>
+						</span>
+						<span class="text">Learn more</span>
+					</button>
+				</p>
+			</div>
+		</div>
+	</div>
+						
+			
+
+
+
+	<div class="col-12 sm:col-6 lg:col-4" style="--theme-color: #7db713;">
+		<div class="tile event-tile  stretched-link-container">
+			<div class="tile-image">
+				<!-- Mode: crop, Ratio: 1 --><tum-image class="frame   " style="--ratio: 1"><picture class="picture"><source
+						srcset="https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/_568x568_crop_center-center_90_none/107000/Hopsathon_FAB.webp?v=1738228784 568w, https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/_447x447_crop_center-center_90_none/107000/Hopsathon_FAB.webp?v=1738228711 447w, https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/_894x894_crop_center-center_90_none/107000/Hopsathon_FAB.webp?v=1738228784 894w"
+						type="image/webp"
+
+													sizes="(max-width: 900px) 80vw, 447px"
+											><img
+						class="img img-w-100 js-lazyload"
+						width="568"
+						height="568"
+						src="https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/_568x568_crop_center-center_90_none/107000/Hopsathon_FAB.webp?v=1738228784"
+						srcset="https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/_568x568_crop_center-center_90_none/107000/Hopsathon_FAB.webp?v=1738228784 568w, https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/_447x447_crop_center-center_90_none/107000/Hopsathon_FAB.webp?v=1738228711 447w, https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/_894x894_crop_center-center_90_none/107000/Hopsathon_FAB.webp?v=1738228784 894w"
+
+													alt="Hopsathon FAB"
+						
+													sizes="(max-width: 900px) 80vw, 447px"
+						
+													loading="lazy"
+											></picture></tum-image>
+				<div class="comb-element p-15">
+					<svg class="comb-icon" height="20" viewBox="0 0 25 20" width="25"
+					     xmlns="http://www.w3.org/2000/svg">
+						<path d="m24 10-6 10h-12l-6-10 6-10h12z" fill="currentColor"
+						      fill-rule="evenodd"/>
+					</svg>
+					<span class="comb-text fs-15">
+						Food / Agro / Biotech
+											</span>
+				</div>
+			</div>
+			<div class="tile-body pt-20 md:pt-30">
+				<h3 class="col-auto mr-auto | fw-bold">
+					<a href="https://www.tum-venture-labs.de/events/hopsathon/"
+					   class="link-ghost stretched-link">HOPSathon</a>
+				</h3>
+				<p class="fw-bold | c-neutral-muted">
+					Monday, June 2, 2025
+					
+				</p>
+				<p class="mt-15 fs-15">
+					<button type="button" class="btn btn-comb">
+						<span class="sticker comb">
+							<svg class="svg-icon" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke-linejoin="round" stroke="#000" stroke-width="2"><path d="m14 15 5-5-5-5M0 10h19.167"/></g></svg>
+						</span>
+						<span class="text">Learn more</span>
+					</button>
+				</p>
+			</div>
+		</div>
+	</div>
+				</div>
+			</div>
+
+							<hr class="divider c-neutral-200 my-section">
+				<div class="container">
+					<h2 class="mb-default display-2">Past Events</h2>
+					<div class="grid">
+													
+			
+
+
+
+	<div class="col-12 sm:col-6 lg:col-4" style="--theme-color: #23308b;">
+		<div class="tile event-tile past-event stretched-link-container">
+			<div class="tile-image">
+				<!-- Mode: crop, Ratio: 1 --><tum-image class="frame   " style="--ratio: 1"><picture class="picture"><source
+						srcset="https://www.tum-venture-labs.de/transforms/images/Events/_568x568_crop_center-center_90_none/108348/EDTH.webp?v=1739450684 568w, https://www.tum-venture-labs.de/transforms/images/Events/_447x447_crop_center-center_90_none/108348/EDTH.webp?v=1739450982 447w, https://www.tum-venture-labs.de/transforms/images/Events/_894x894_crop_center-center_90_none/108348/EDTH.webp?v=1739450982 894w"
+						type="image/webp"
+
+													sizes="(max-width: 900px) 80vw, 447px"
+											><img
+						class="img img-w-100 js-lazyload"
+						width="568"
+						height="568"
+						src="https://www.tum-venture-labs.de/transforms/images/Events/_568x568_crop_center-center_90_none/108348/EDTH.webp?v=1739450684"
+						srcset="https://www.tum-venture-labs.de/transforms/images/Events/_568x568_crop_center-center_90_none/108348/EDTH.webp?v=1739450684 568w, https://www.tum-venture-labs.de/transforms/images/Events/_447x447_crop_center-center_90_none/108348/EDTH.webp?v=1739450982 447w, https://www.tum-venture-labs.de/transforms/images/Events/_894x894_crop_center-center_90_none/108348/EDTH.webp?v=1739450982 894w"
+
+													alt="EDTH"
+						
+													sizes="(max-width: 900px) 80vw, 447px"
+						
+													loading="lazy"
+											></picture></tum-image>
+				<div class="comb-element p-15">
+					<svg class="comb-icon" height="20" viewBox="0 0 25 20" width="25"
+					     xmlns="http://www.w3.org/2000/svg">
+						<path d="m24 10-6 10h-12l-6-10 6-10h12z" fill="currentColor"
+						      fill-rule="evenodd"/>
+					</svg>
+					<span class="comb-text fs-15">
+						Aerospace
+											</span>
+				</div>
+			</div>
+			<div class="tile-body pt-20 md:pt-30">
+				<h3 class="col-auto mr-auto | fw-bold">
+					<a href="https://www.tum-venture-labs.de/events/european-defense-tech-hackathon/"
+					   class="link-ghost stretched-link">European Defense Tech Hackathon</a>
+				</h3>
+				<p class="fw-bold | c-neutral-muted">
+					Thursday, February 13, 2025
+					
+				</p>
+				<p class="mt-15 fs-15">
+					<button type="button" class="btn btn-comb">
+						<span class="sticker comb">
+							<svg class="svg-icon" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke-linejoin="round" stroke="#000" stroke-width="2"><path d="m14 15 5-5-5-5M0 10h19.167"/></g></svg>
+						</span>
+						<span class="text">Learn more</span>
+					</button>
+				</p>
+			</div>
+		</div>
+	</div>
+							
+			
+
+
+
+	<div class="col-12 sm:col-6 lg:col-4" style="--theme-color: #fde900;">
+		<div class="tile event-tile past-event stretched-link-container">
+			<div class="tile-image">
+				<!-- Mode: crop, Ratio: 1 --><tum-image class="frame   " style="--ratio: 1"><picture class="picture"><source
+						srcset="https://www.tum-venture-labs.de/transforms/images/Events/_568x568_crop_center-center_90_none/96900/241105_AEC-Hackathon-website.webp?v=1738088991 568w, https://www.tum-venture-labs.de/transforms/images/Events/_447x447_crop_center-center_90_none/96900/241105_AEC-Hackathon-website.webp?v=1738088996 447w, https://www.tum-venture-labs.de/transforms/images/Events/_894x894_crop_center-center_90_none/96900/241105_AEC-Hackathon-website.webp?v=1738088996 894w"
+						type="image/webp"
+
+													sizes="(max-width: 900px) 80vw, 447px"
+											><img
+						class="img img-w-100 js-lazyload"
+						width="568"
+						height="568"
+						src="https://www.tum-venture-labs.de/transforms/images/Events/_568x568_crop_center-center_90_none/96900/241105_AEC-Hackathon-website.webp?v=1738088991"
+						srcset="https://www.tum-venture-labs.de/transforms/images/Events/_568x568_crop_center-center_90_none/96900/241105_AEC-Hackathon-website.webp?v=1738088991 568w, https://www.tum-venture-labs.de/transforms/images/Events/_447x447_crop_center-center_90_none/96900/241105_AEC-Hackathon-website.webp?v=1738088996 447w, https://www.tum-venture-labs.de/transforms/images/Events/_894x894_crop_center-center_90_none/96900/241105_AEC-Hackathon-website.webp?v=1738088996 894w"
+
+													alt="Flyer on aec hackathon"
+						
+													sizes="(max-width: 900px) 80vw, 447px"
+						
+													loading="lazy"
+											></picture></tum-image>
+				<div class="comb-element p-15">
+					<svg class="comb-icon" height="20" viewBox="0 0 25 20" width="25"
+					     xmlns="http://www.w3.org/2000/svg">
+						<path d="m24 10-6 10h-12l-6-10 6-10h12z" fill="currentColor"
+						      fill-rule="evenodd"/>
+					</svg>
+					<span class="comb-text fs-15">
+						Built Environment
+											</span>
+				</div>
+			</div>
+			<div class="tile-body pt-20 md:pt-30">
+				<h3 class="col-auto mr-auto | fw-bold">
+					<a href="https://www.tum-venture-labs.de/events/aec-hackathon-munich-edition/"
+					   class="link-ghost stretched-link">AEC Hackathon Munich Edition</a>
+				</h3>
+				<p class="fw-bold | c-neutral-muted">
+					Friday, November 22, 2024
+					
+				</p>
+				<p class="mt-15 fs-15">
+					<button type="button" class="btn btn-comb">
+						<span class="sticker comb">
+							<svg class="svg-icon" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke-linejoin="round" stroke="#000" stroke-width="2"><path d="m14 15 5-5-5-5M0 10h19.167"/></g></svg>
+						</span>
+						<span class="text">Learn more</span>
+					</button>
+				</p>
+			</div>
+		</div>
+	</div>
+							
+			
+
+
+
+	<div class="col-12 sm:col-6 lg:col-4" style="--theme-color: #7db713;">
+		<div class="tile event-tile past-event stretched-link-container">
+			<div class="tile-image">
+				<!-- Mode: crop, Ratio: 1 --><tum-image class="frame   " style="--ratio: 1"><picture class="picture"><source
+						srcset="https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_568x568_crop_center-center_90_none/93089/SCI24055_AP-Pipelines-Hackathon-webinar-graphics_Enews.webp?v=1738088992 568w, https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_447x447_crop_center-center_90_none/93089/SCI24055_AP-Pipelines-Hackathon-webinar-graphics_Enews.webp?v=1738088996 447w, https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_894x894_crop_center-center_90_none/93089/SCI24055_AP-Pipelines-Hackathon-webinar-graphics_Enews.webp?v=1738088996 894w"
+						type="image/webp"
+
+													sizes="(max-width: 900px) 80vw, 447px"
+											><img
+						class="img img-w-100 js-lazyload"
+						width="568"
+						height="568"
+						src="https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_568x568_crop_center-center_90_none/93089/SCI24055_AP-Pipelines-Hackathon-webinar-graphics_Enews.webp?v=1738088992"
+						srcset="https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_568x568_crop_center-center_90_none/93089/SCI24055_AP-Pipelines-Hackathon-webinar-graphics_Enews.webp?v=1738088992 568w, https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_447x447_crop_center-center_90_none/93089/SCI24055_AP-Pipelines-Hackathon-webinar-graphics_Enews.webp?v=1738088996 447w, https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_894x894_crop_center-center_90_none/93089/SCI24055_AP-Pipelines-Hackathon-webinar-graphics_Enews.webp?v=1738088996 894w"
+
+													alt="SCI24055 AP Pipelines Hackathon webinar graphics Enews"
+						
+													sizes="(max-width: 900px) 80vw, 447px"
+						
+													loading="lazy"
+											></picture></tum-image>
+				<div class="comb-element p-15">
+					<svg class="comb-icon" height="20" viewBox="0 0 25 20" width="25"
+					     xmlns="http://www.w3.org/2000/svg">
+						<path d="m24 10-6 10h-12l-6-10 6-10h12z" fill="currentColor"
+						      fill-rule="evenodd"/>
+					</svg>
+					<span class="comb-text fs-15">
+						Food / Agro / Biotech
+											</span>
+				</div>
+			</div>
+			<div class="tile-body pt-20 md:pt-30">
+				<h3 class="col-auto mr-auto | fw-bold">
+					<a href="https://www.tum-venture-labs.de/events/alt-protein-innovation-hackathon/"
+					   class="link-ghost stretched-link">Alt Protein Pipelines: Hackathons as innovation and career catalysts</a>
+				</h3>
+				<p class="fw-bold | c-neutral-muted">
+					Tuesday, October 1, 2024
+					
+				</p>
+				<p class="mt-15 fs-15">
+					<button type="button" class="btn btn-comb">
+						<span class="sticker comb">
+							<svg class="svg-icon" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke-linejoin="round" stroke="#000" stroke-width="2"><path d="m14 15 5-5-5-5M0 10h19.167"/></g></svg>
+						</span>
+						<span class="text">Learn more</span>
+					</button>
+				</p>
+			</div>
+		</div>
+	</div>
+							
+			
+
+
+
+	<div class="col-12 sm:col-6 lg:col-4" style="--theme-color: #7db713;">
+		<div class="tile event-tile past-event stretched-link-container">
+			<div class="tile-image">
+				<!-- Mode: crop, Ratio: 1 --><tum-image class="frame   " style="--ratio: 1"><picture class="picture"><source
+						srcset="https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_568x568_crop_center-center_90_none/60775/Bite-sized-Innovations-Website-Bild.webp?v=1738088993 568w, https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_447x447_crop_center-center_90_none/60775/Bite-sized-Innovations-Website-Bild.webp?v=1738088996 447w, https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_894x894_crop_center-center_90_none/60775/Bite-sized-Innovations-Website-Bild.webp?v=1738088996 894w"
+						type="image/webp"
+
+													sizes="(max-width: 900px) 80vw, 447px"
+											><img
+						class="img img-w-100 js-lazyload"
+						width="568"
+						height="568"
+						src="https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_568x568_crop_center-center_90_none/60775/Bite-sized-Innovations-Website-Bild.webp?v=1738088993"
+						srcset="https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_568x568_crop_center-center_90_none/60775/Bite-sized-Innovations-Website-Bild.webp?v=1738088993 568w, https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_447x447_crop_center-center_90_none/60775/Bite-sized-Innovations-Website-Bild.webp?v=1738088996 447w, https://www.tum-venture-labs.de/transforms/images/Labs/Food-Agro-Biotech/Events/_894x894_crop_center-center_90_none/60775/Bite-sized-Innovations-Website-Bild.webp?v=1738088996 894w"
+
+													alt="Bite sized Innovations Website Bild"
+						
+													sizes="(max-width: 900px) 80vw, 447px"
+						
+													loading="lazy"
+											></picture></tum-image>
+				<div class="comb-element p-15">
+					<svg class="comb-icon" height="20" viewBox="0 0 25 20" width="25"
+					     xmlns="http://www.w3.org/2000/svg">
+						<path d="m24 10-6 10h-12l-6-10 6-10h12z" fill="currentColor"
+						      fill-rule="evenodd"/>
+					</svg>
+					<span class="comb-text fs-15">
+						Food / Agro / Biotech
+											</span>
+				</div>
+			</div>
+			<div class="tile-body pt-20 md:pt-30">
+				<h3 class="col-auto mr-auto | fw-bold">
+					<a href="https://www.tum-venture-labs.de/events/bite-sized-innovations-hacking-the-future-of-alternative-protein/"
+					   class="link-ghost stretched-link">Bite-sized Innovations: Hacking the Future of Alternative Protein</a>
+				</h3>
+				<p class="fw-bold | c-neutral-muted">
+					Thursday, June 20, 2024
+					
+				</p>
+				<p class="mt-15 fs-15">
+					<button type="button" class="btn btn-comb">
+						<span class="sticker comb">
+							<svg class="svg-icon" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke-linejoin="round" stroke="#000" stroke-width="2"><path d="m14 15 5-5-5-5M0 10h19.167"/></g></svg>
+						</span>
+						<span class="text">Learn more</span>
+					</button>
+				</p>
+			</div>
+		</div>
+	</div>
+							
+			
+
+
+
+	<div class="col-12 sm:col-6 lg:col-4" style="--theme-color: #3070B3;">
+		<div class="tile event-tile past-event stretched-link-container">
+			<div class="tile-image">
+				<!-- Mode: crop, Ratio: 1 --><tum-image class="frame   " style="--ratio: 1"><picture class="picture"><source
+						srcset="https://www.tum-venture-labs.de/transforms/images/Events/_568x568_crop_center-center_90_none/52247/MakeaTUM_Pilz.webp?v=1738088993 568w, https://www.tum-venture-labs.de/transforms/images/Events/_447x447_crop_center-center_90_none/52247/MakeaTUM_Pilz.webp?v=1738088996 447w, https://www.tum-venture-labs.de/transforms/images/Events/_894x894_crop_center-center_90_none/52247/MakeaTUM_Pilz.webp?v=1738088996 894w"
+						type="image/webp"
+
+													sizes="(max-width: 900px) 80vw, 447px"
+											><img
+						class="img img-w-100 js-lazyload"
+						width="568"
+						height="568"
+						src="https://www.tum-venture-labs.de/transforms/images/Events/_568x568_crop_center-center_90_none/52247/MakeaTUM_Pilz.webp?v=1738088993"
+						srcset="https://www.tum-venture-labs.de/transforms/images/Events/_568x568_crop_center-center_90_none/52247/MakeaTUM_Pilz.webp?v=1738088993 568w, https://www.tum-venture-labs.de/transforms/images/Events/_447x447_crop_center-center_90_none/52247/MakeaTUM_Pilz.webp?v=1738088996 447w, https://www.tum-venture-labs.de/transforms/images/Events/_894x894_crop_center-center_90_none/52247/MakeaTUM_Pilz.webp?v=1738088996 894w"
+
+													alt="Makea TUM Pilz"
+						
+													sizes="(max-width: 900px) 80vw, 447px"
+						
+													loading="lazy"
+											></picture></tum-image>
+				<div class="comb-element p-15">
+					<svg class="comb-icon" height="20" viewBox="0 0 25 20" width="25"
+					     xmlns="http://www.w3.org/2000/svg">
+						<path d="m24 10-6 10h-12l-6-10 6-10h12z" fill="currentColor"
+						      fill-rule="evenodd"/>
+					</svg>
+					<span class="comb-text fs-15">
+						TUM Venture Labs
+											</span>
+				</div>
+			</div>
+			<div class="tile-body pt-20 md:pt-30">
+				<h3 class="col-auto mr-auto | fw-bold">
+					<a href="https://www.tum-venture-labs.de/events/makeatum-bionics-hackathon-2/"
+					   class="link-ghost stretched-link">MakeaTUM Bionics Hackathon</a>
+				</h3>
+				<p class="fw-bold | c-neutral-muted">
+					Wednesday, April 24, 2024
+					
+				</p>
+				<p class="mt-15 fs-15">
+					<button type="button" class="btn btn-comb">
+						<span class="sticker comb">
+							<svg class="svg-icon" width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" stroke-linejoin="round" stroke="#000" stroke-width="2"><path d="m14 15 5-5-5-5M0 10h19.167"/></g></svg>
+						</span>
+						<span class="text">Learn more</span>
+					</button>
+				</p>
+			</div>
+		</div>
+	</div>
+					</div>
+				</div>
+					</section>
+	</div>
+</div>
