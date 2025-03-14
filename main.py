@@ -1,162 +1,9 @@
-import re
-from urllib.parse import urljoin
+import logging
+import sqlite3
 
-import requests
-from bs4 import BeautifulSoup
-
-from llm_support import fill_in
-from models import Hackathon
-
-
-def html(url: str):
-    response = requests.get(url)
-    if response.ok:
-        return BeautifulSoup(response.text, "html.parser")
-    print(
-        f"Failed to scrape {url}, status code: {response.status_code}, reason: {response.reason}"
-    )
-
-
-def json(url: str):
-    response = requests.get(url)
-    if response.ok:
-        try:
-            return response.json()
-        except Exception as e:
-            print(f"Failed to parse JSON from {url}: {e}")
-    print(
-        f"Failed to scrape {url}, status code: {response.status_code}, reason: {response.reason}"
-    )
-
-
-def get_hackathon(url: str) -> Hackathon:
-    soup = html(url)
-    hack = Hackathon(url, "", "", "", "", "")
-    for meta in soup.find_all("meta"):
-        match meta.get("property"):
-            case "og:image":
-                hack.image = meta["content"]
-            case "og:title":
-                hack.name = meta["content"]
-            case "og:description":
-                hack.description = meta["content"]
-            case "og:url":
-                hack.url = meta["content"]
-            case "og:site_name":
-                hack.location = meta["content"]
-
-    print(hack)
-    text = soup.find("body").get_text("\n", strip=True)
-    return fill_in(hack, text)
-
-
-def get_from_aggregator(url) -> set[str]:
-    soup = html(url)
-    return {
-        urljoin(url, a["href"])
-        for a in soup.find_all("a", href=True)
-        if "hackathon" in a["href"].lower()
-    }
-
-
-def devpost():
-    data = json(
-        "https://devpost.com/api/hackathons?open_to[]=public&search=munich&status[]=upcoming&status[]=open"
-    )
-    for hack in data["hackathons"]:
-        hackathons.append(
-            Hackathon(
-                url=hack["url"],
-                image=hack["thumbnail_url"],
-                name=hack["title"],
-                description=f"Prize: {hack['prize_amount']}, Registrations: {hack['registrations_count']}",
-                date=hack["submission_period_dates"],
-                location=hack["displayed_location"]["location"],
-            )
-        )
-
-
-def tumthinktank():
-    soup = html(
-        "https://tumthinktank.de/wp-admin/admin-ajax.php?action=wpcss_load_more_posts&type=cpt_event&offset=0&exclude=&more=1"
-    )
-    i = 8
-    while re.search(r"Show \d+ more", soup.text):
-        links = soup.find_all("a", href=True)
-        sources.add(
-            urljoin("https://tumthinktank.de/", a["href"])
-            for a in links
-            if "hackathon" in a["href"].lower()
-        )
-        soup = html(
-            f"https://tumthinktank.de/wp-admin/admin-ajax.php?action=wpcss_load_more_posts&type=cpt_event&offset={i}&exclude=&more=1"
-        )
-        i += 8
-
-
-def unternehmertum():
-    soup = html("https://www.unternehmertum.de/events?filter%5B%5D=9511")
-    table_list = soup.find(class_="table-list")
-    for event in table_list.find_all("li"):
-        url = event.find("a")["href"]
-        date = event.find("div", class_="col-12 lg:col-2").get_text(strip=True)
-        name = event.find("h3").get_text(strip=True)
-        description = event.find("div", class_="mb-20 sm:mb-30").get_text(strip=True)
-
-        hackathons.append(
-            Hackathon(url=url, image="", name=name, description=description, date=date)
-        )
-
-
-def tum_venture_labs():
-    soup = html(
-        "https://www.tum-venture-labs.de/index.php?p=actions/sprig-core/components/render&eventFormats%5B%5D=66989&sprig%3AsiteId=9a1761719fed643d2a9161f9bfa109521c7487343e041b2d3541f6f497b907ed1&sprig%3Aid=18f5b0bbf1163c3ee576f32b2b84820f55e7f2099ee44df628295be00ca478d4s-events-list&sprig%3Acomponent=7b3a1f07361ad5a76557bad89bff243735691e7103956a9201f2c2959b531556&sprig%3Atemplate=49f84ea3b95926b92ef6f0545f1b9613962135886d4703c8e69d52dcaacc4088events%2F_event-list"
-    )
-    links = soup.find_all("a", href=True)
-    sources.add(urljoin("https://www.tum-venture-labs.de/", a["href"]) for a in links)
-
-
-def huawei():
-    data = json("https://huawei.agorize.com/api/v2/challenges")
-    for item in data['data']:
-        attributes = item['attributes']
-        hackathon = Hackathon(
-            url=f"https://huawei.agorize.com/{attributes['slug']}",
-            image=attributes['board_image_url'],
-            name=attributes['name'],
-            description=attributes['summary'],
-            date=f"{attributes['start_at']} - {attributes['create_or_join_team_allowed_until']}",
-            location="",
-        )
-        hackathons.append(hackathon)
-    if not data['meta']['page']['last_page']:
-        print("implement paging for Huawei")
-
-
-def n3xtcoder():
-    try:
-        data = requests.get(
-            "https://n3xtcoder.org/api/event-cards?offset=0&sort=desc&pageSize=6&lang=en"
-        ).json()
-    except Exception as e:
-        print(f"Failed to get hackathons from n3xtcoder: {e}")
-        return
-    for card in data["data"]["cards"]:
-        if card["typeOfEvent"] != "hackathon":
-            continue
-        time = card["timeFrame"]
-        hackathon = Hackathon(
-            url=urljoin("https://n3xtcoder.org/", card["slug"]),
-            image="assets/n3xtcoder.png",
-            name=card["title"],
-            description="",
-            date=f"{time[["starttime"]]} - {time["endtime"]}",
-            location="",
-        )
-        hackathons.append(hackathon)
-
-
-hackathons = []
+from aggregator import AggregatorType, aggregator_scrapers
+from direct_scraper import DirectScraperType, direct_scrapers
+from models import ScraperModel
 
 sources = {
     "https://hack.tum.de",
@@ -172,6 +19,7 @@ sources = {
     "https://hackathon.radiology.bayer.com/",
     "https://www.hackbay.de/",
 }
+
 aggregators = {
     "https://roboinnovate.mirmi.tum.de/",
     "https://opensource.construction/#events",
@@ -183,16 +31,114 @@ aggregators = {
     "https://www.tum-blockchain.com/events-category/hackathon",
 }
 
-for aggregator in aggregators:
-    print(f"Getting hackathons from {aggregator}...")
-    sources |= get_from_aggregator(aggregator)
+DEFAULT_SCRAPE_FREQUENCY = "30 days"
+LLM_SUGGESTION = -1
 
-devpost()
-tum_venture_labs()
+logging.basicConfig(level=logging.INFO)
 
-print(f"Found {len(sources)} hackathons: {sources}")
+con = sqlite3.connect("hackathon.db")
+cur = con.cursor()
+cur.execute("PRAGMA foreign_keys = ON")
+cur.execute("""
+CREATE TABLE IF NOT EXISTS scraper(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    direct BOOLEAN NOT NULL,
+    type INTEGER NOT NULL,
+    url TEXT UNIQUE,
+    last_scraped DATETIME,
+    next_scrape DATE,
+    frequency INTERVAL,
+    from_scraper INTEGER,
+    FOREIGN KEY (from_scraper) REFERENCES scraper(id)
+)
+""")
+# LLM suggestions
+cur.execute(
+    """INSERT INTO scraper (id, direct, type, next_scrape) VALUES (?, true, -1, NULL) ON CONFLICT DO NOTHING""", (LLM_SUGGESTION,)
+)
+cur.execute("""
+CREATE TABLE IF NOT EXISTS hackathon(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    url TEXT NOT NULL UNIQUE,
+    image TEXT,
+    name TEXT,
+    description TEXT,
+    date DATE,
+    location TEXT
+)
+""")
+cur.execute("""
+CREATE TABLE IF NOT EXISTS suggestion(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    image TEXT,
+    name TEXT,
+    description TEXT,
+    date DATE,
+    location TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    hackathon_id INTEGER,
+    scraper_id INTEGER,
+    FOREIGN KEY (scraper_id) REFERENCES scraper(id),
+    FOREIGN KEY (hackathon_id) REFERENCES hackathon(id)
+)
+""")
+con.commit()
 
-for source in sources:
-    print(f"Scraping {source}...")
-    hackathon = get_hackathon(source)
-    print(hackathon)
+cur.execute("""
+        SELECT * FROM scraper
+        WHERE NOT direct AND next_scrape < current_timestamp
+    """)
+aggregators: list[ScraperModel] = list(map(lambda a: ScraperModel(*a), cur.fetchall()))
+logging.info("Fetching %d aggregators...", len(aggregators))
+
+for agg in aggregators:
+    scraper = aggregator_scrapers[AggregatorType(agg.type)]
+    try:
+        links = scraper(agg.url)
+    except Exception as e:
+        logging.exception("Aggregator %s failed:", agg.url, exc_info=e)
+        continue
+    cur.executemany(
+        f"""INSERT INTO scraper (direct, type, url, next_scrape, frequency, from_scraper) VALUES (true, 0, ?, current_timestamp, {DEFAULT_SCRAPE_FREQUENCY}, {agg.id}) ON CONFLICT DO NOTHING""",
+        links,
+    )
+    cur.execute(
+        "UPDATE scraper SET last_scraped=current_timestamp, next_scrape=datetime(current_timestamp, frequency || ' days') WHERE id=?",
+        (agg.id,),
+    )
+    con.commit()
+
+logging.info("Fetching aggregators done")
+
+cur.execute("""
+        SELECT * FROM scraper
+        WHERE direct AND next_scrape < current_timestamp
+    """)
+pages: list[ScraperModel] = list(map(lambda a: ScraperModel(*a), cur.fetchall()))
+logging.info("Fetching %d pages...", len(pages))
+
+for page in pages:
+    scraper = direct_scrapers[DirectScraperType(page.type)]
+    try:
+        hackathons = scraper(page.url)
+    except Exception as e:
+        logging.exception("Page %s failed:", page.url, exc_info=e)
+    else:
+        for hack in hackathons:
+            existing = cur.execute("SELECT * FROM hackathon WHERE url = ?", (hack.url,)).fetchone()
+            if existing:
+                cur.execute(
+                    """INSERT INTO suggestion (image, name, description, date, location, hackathon_id, scraper_id) VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                    (hack.image, hack.name, hack.description, hack.date, hack.location, existing[0], scraper.id))
+            else:
+                cur.execute(
+                    """INSERT INTO hackathon (url, image, name, description, date, location, scraper_id) VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                    (hack.url, hack.image, hack.name, hack.description, hack.date, hack.location, scraper.id))
+    finally:
+        cur.execute(
+            "UPDATE scraper SET last_scraped=current_timestamp, next_scrape=datetime(current_timestamp, frequency || ' days') WHERE id=?",
+            (page.id,),
+        )
+        con.commit()
+
+logging.info("Fetching pages done")
