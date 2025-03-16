@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
-#from llm_support import fill_in
+# from llm_support import fill_in
 from models import Hackathon
 
 

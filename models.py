@@ -13,18 +13,6 @@ class Hackathon:
 
 
 @dataclass
-class ScraperModel:
-    id: int
-    direct: bool
-    type: int
-    url: str
-    last_scraped: datetime.datetime
-    next_scrape: datetime.date
-    frequency: int
-    from_scraper: int
-
-
-@dataclass
 class HackathonModel:
     id: int
     created_at: datetime.datetime
@@ -35,3 +23,15 @@ class HackathonModel:
     date: str
     location: str
     scraper_id: int
+
+
+@dataclass
+class ScraperModel:
+    id: int
+    direct: bool
+    type: int
+    url: str
+    last_scraped: datetime.datetime
+    next_scrape: datetime.date
+    frequency: int
+    from_scraper: int

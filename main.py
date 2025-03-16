@@ -3,33 +3,7 @@ import sqlite3
 
 from aggregator import AggregatorType, aggregator_scrapers
 from direct_scraper import DirectScraperType, direct_scrapers
-from models import ScraperModel
-
-sources = {
-    "https://hack.tum.de",
-    "https://hackfest.tech/",
-    "https://ethmunich.de/",
-    "https://hack.startmunich.de/events/rtsh",
-    "https://makeathon.tum-ai.com/",
-    "https://munihac.de",
-    "https://www.cassini.eu/hackathons/",
-    # 403 "https://eudis-hackathon.eu/",
-    "https://imprs-astro-hackathon.de/",
-    "https://www.pushquantum.tech/pq-hackathon",
-    "https://hackathon.radiology.bayer.com/",
-    "https://www.hackbay.de/",
-}
-
-aggregators = {
-    "https://roboinnovate.mirmi.tum.de/",
-    "https://opensource.construction/#events",
-    "https://germantechjobs.de/events",
-    "https://www.bayern-innovativ.de/events-termine/",
-    "https://www.munich-urban-colab.de/events",
-    "https://www.mdsi.tum.de/mdsi/aktuelles/veranstaltungen/",
-    "https://veranstaltungen.muenchen.de/rit/",
-    "https://www.tum-blockchain.com/events-category/hackathon",
-}
+from models import ScraperModel, Hackathon, HackathonModel
 
 DEFAULT_SCRAPE_FREQUENCY = "30 days"
 LLM_SUGGESTION = -1
@@ -54,7 +28,8 @@ CREATE TABLE IF NOT EXISTS scraper(
 """)
 # LLM suggestions
 cur.execute(
-    """INSERT INTO scraper (id, direct, type, next_scrape) VALUES (?, true, -1, NULL) ON CONFLICT DO NOTHING""", (LLM_SUGGESTION,)
+    """INSERT INTO scraper (id, direct, type, url, next_scrape) VALUES (?, true, -1, 'LLM', NULL) ON CONFLICT DO NOTHING""",
+    (LLM_SUGGESTION,),
 )
 cur.execute("""
 CREATE TABLE IF NOT EXISTS hackathon(
@@ -84,60 +59,81 @@ CREATE TABLE IF NOT EXISTS suggestion(
 """)
 con.commit()
 
-cur.execute("""
-        SELECT * FROM scraper
-        WHERE NOT direct AND next_scrape < current_timestamp
-    """)
-aggregators: list[ScraperModel] = list(map(lambda a: ScraperModel(*a), cur.fetchall()))
-logging.info("Fetching %d aggregators...", len(aggregators))
 
-for agg in aggregators:
-    scraper = aggregator_scrapers[AggregatorType(agg.type)]
-    try:
-        links = scraper(agg.url)
-    except Exception as e:
-        logging.exception("Aggregator %s failed:", agg.url, exc_info=e)
-        continue
-    cur.executemany(
-        f"""INSERT INTO scraper (direct, type, url, next_scrape, frequency, from_scraper) VALUES (true, 0, ?, current_timestamp, {DEFAULT_SCRAPE_FREQUENCY}, {agg.id}) ON CONFLICT DO NOTHING""",
-        links,
-    )
-    cur.execute(
-        "UPDATE scraper SET last_scraped=current_timestamp, next_scrape=datetime(current_timestamp, frequency || ' days') WHERE id=?",
-        (agg.id,),
-    )
-    con.commit()
-
-logging.info("Fetching aggregators done")
-
-cur.execute("""
-        SELECT * FROM scraper
-        WHERE direct AND next_scrape < current_timestamp
-    """)
-pages: list[ScraperModel] = list(map(lambda a: ScraperModel(*a), cur.fetchall()))
-logging.info("Fetching %d pages...", len(pages))
-
-for page in pages:
-    scraper = direct_scrapers[DirectScraperType(page.type)]
-    try:
-        hackathons = scraper(page.url)
-    except Exception as e:
-        logging.exception("Page %s failed:", page.url, exc_info=e)
-    else:
-        for hack in hackathons:
-            existing = cur.execute("SELECT * FROM hackathon WHERE url = ?", (hack.url,)).fetchone()
-            if existing:
+def upsert_hackathons(hackathons: list[Hackathon], scraper: ScraperModel):
+    for hack in hackathons:
+        existing = cur.execute(
+            "SELECT * FROM hackathon WHERE url = ?", (hack.url,)
+        ).fetchone()
+        if existing:
+            ex = HackathonModel(*existing)
+            if (
+                ex.image != hack.image
+                or ex.name != hack.name
+                or ex.description != hack.description
+                or ex.date != hack.date
+                or ex.location != hack.location
+            ):
                 cur.execute(
                     """INSERT INTO suggestion (image, name, description, date, location, hackathon_id, scraper_id) VALUES (?, ?, ?, ?, ?, ?, ?)""",
-                    (hack.image, hack.name, hack.description, hack.date, hack.location, existing[0], scraper.id))
-            else:
-                cur.execute(
-                    """INSERT INTO hackathon (url, image, name, description, date, location, scraper_id) VALUES (?, ?, ?, ?, ?, ?, ?)""",
-                    (hack.url, hack.image, hack.name, hack.description, hack.date, hack.location, scraper.id))
+                    (
+                        hack.image,
+                        hack.name,
+                        hack.description,
+                        hack.date,
+                        hack.location,
+                        ex.id,
+                        scraper.id,
+                    ),
+                )
+        else:
+            cur.execute(
+                """INSERT INTO hackathon (url, image, name, description, date, location, scraper_id) VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                (
+                    hack.url,
+                    hack.image,
+                    hack.name,
+                    hack.description,
+                    hack.date,
+                    hack.location,
+                    scraper.id,
+                ),
+            )
+
+
+def insert_scraper(links: set[str]):
+    for link in links:
+        cur.execute(
+            "INSERT INTO scraper (direct, type, url, next_scrape, frequency, from_scraper) VALUES (true, 0, ?, current_timestamp, ?, ?) ON CONFLICT DO NOTHING",
+            (link, DEFAULT_SCRAPE_FREQUENCY, scraper.id),
+        )
+
+
+cur.execute("""
+        SELECT * FROM scraper
+        WHERE next_scrape < current_timestamp
+    """)
+all_scraper: list[ScraperModel] = list(map(lambda s: ScraperModel(*s), cur.fetchall()))
+logging.info("Fetching %d pages...", len(all_scraper))
+
+for scraper in all_scraper:
+    try:
+        if scraper.direct:
+            scrape = direct_scrapers[DirectScraperType(scraper.type)]
+        else:
+            scrape = aggregator_scrapers[AggregatorType(scraper.type)]
+        links_or_hackathons = scrape(scraper.url)
+    except Exception as e:
+        logging.exception("Page %s failed:", scraper.url, exc_info=e)
+    else:
+        if scraper.direct:
+            upsert_hackathons(links_or_hackathons, scraper)
+        else:
+            insert_scraper(links_or_hackathons)
     finally:
         cur.execute(
-            "UPDATE scraper SET last_scraped=current_timestamp, next_scrape=datetime(current_timestamp, frequency || ' days') WHERE id=?",
-            (page.id,),
+            "UPDATE scraper SET last_scraped=current_timestamp, next_scrape=datetime(current_timestamp, frequency) WHERE id=?",
+            (scraper.id,),
         )
         con.commit()
 
