@@ -2,11 +2,9 @@ import logging
 import sqlite3
 
 from aggregator import AggregatorType, aggregator_scrapers
+from config import DEFAULT_SCRAPE_FREQUENCY
 from direct_scraper import DirectScraperType, direct_scrapers
 from models import ScraperModel, Hackathon, HackathonModel
-
-DEFAULT_SCRAPE_FREQUENCY = "30 days"
-LLM_SUGGESTION = -1
 
 logging.basicConfig(level=logging.INFO)
 
@@ -21,15 +19,14 @@ CREATE TABLE IF NOT EXISTS scraper(
     url TEXT UNIQUE,
     last_scraped DATETIME,
     next_scrape DATE,
-    frequency INTERVAL,
     from_scraper INTEGER,
     FOREIGN KEY (from_scraper) REFERENCES scraper(id)
 )
 """)
 # LLM suggestions
 cur.execute(
-    """INSERT INTO scraper (id, direct, type, url, next_scrape) VALUES (?, true, -1, 'LLM', NULL) ON CONFLICT DO NOTHING""",
-    (LLM_SUGGESTION,),
+    """INSERT INTO scraper (id, direct, type, url, next_scrape) VALUES (0, true, ?, 'LLM', NULL) ON CONFLICT DO NOTHING""",
+    (DirectScraperType.LLM,),
 )
 cur.execute("""
 CREATE TABLE IF NOT EXISTS hackathon(
@@ -38,7 +35,7 @@ CREATE TABLE IF NOT EXISTS hackathon(
     image TEXT,
     name TEXT,
     description TEXT,
-    date DATE,
+    date TEXT,
     location TEXT
 )
 """)
@@ -48,7 +45,7 @@ CREATE TABLE IF NOT EXISTS suggestion(
     image TEXT,
     name TEXT,
     description TEXT,
-    date DATE,
+    date TEXT,
     location TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     hackathon_id INTEGER,
@@ -104,8 +101,8 @@ def upsert_hackathons(hackathons: list[Hackathon], scraper: ScraperModel):
 def insert_scraper(links: set[str]):
     for link in links:
         cur.execute(
-            "INSERT INTO scraper (direct, type, url, next_scrape, frequency, from_scraper) VALUES (true, 0, ?, current_timestamp, ?, ?) ON CONFLICT DO NOTHING",
-            (link, DEFAULT_SCRAPE_FREQUENCY, scraper.id),
+            "INSERT INTO scraper (direct, type, url, next_scrape, from_scraper) VALUES (true, 0, ?, current_timestamp, ?) ON CONFLICT DO NOTHING",
+            (link, scraper.id),
         )
 
 
@@ -132,8 +129,8 @@ for scraper in all_scraper:
             insert_scraper(links_or_hackathons)
     finally:
         cur.execute(
-            "UPDATE scraper SET last_scraped=current_timestamp, next_scrape=datetime(current_timestamp, frequency) WHERE id=?",
-            (scraper.id,),
+            "UPDATE scraper SET last_scraped=current_timestamp, next_scrape=datetime(current_timestamp, ?) WHERE id=?",
+            (DEFAULT_SCRAPE_FREQUENCY, scraper.id,),
         )
         con.commit()
 

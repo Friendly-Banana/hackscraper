@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('.static', filename='style.css')}}">
+    <title>Edit Scraper</title>
+    <style>
+        button {
+            margin: 0.5em 0;
+        }
+    </style>
+</head>
+<body>
+<h1>Edit Scraper</h1>
+<form method="post">
+    <label for="direct">Direct:</label>
+    <input type="checkbox" id="direct" name="direct" {% if scraper.direct %}checked{% endif %}><br>
+
+    <label for="type">Type:</label>
+    <select id="type" name="type" required>
+        <optgroup label="Direct Scrapers">
+            {% for scraper_type in direct_scraper_types %}
+            <option value="{{ scraper_type.value }}" {% if scraper.direct and scraper.type== scraper_type.value %}selected{% endif %}>{{
+                scraper_type.name }}
+            </option>
+            {% endfor %}
+        </optgroup>
+        <optgroup label="Aggregator Scrapers">
+            {% for scraper_type in aggregator_scraper_types %}
+            <option value="{{ scraper_type.value }}" {% if not scraper.direct and scraper.type== scraper_type.value %}selected{% endif %}>{{
+                scraper_type.name }}
+            </option>
+            {% endfor %}
+        </optgroup>
+    </select><br>
+
+    <label for="url">URL:</label>
+    <input type="text" id="url" name="url" value="{{ scraper.url }}" required><br>
+
+    <button type="submit">Update</button>
+</form>
+
+<form method="post" action="/scraper/{{ scraper.id }}/delete">
+    <button type="submit" style="background-color: #dc3545; color: white;">Delete Scraper</button>
+</form>
+
+<a href="/scrapers">Back to Scrapers</a>
+</body>
+</html>

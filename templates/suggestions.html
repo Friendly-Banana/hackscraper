@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('.static', filename='style.css')}}">
+    <title>Suggestions</title>
+</head>
+<body>
+<h1>Suggestions</h1>
+<ul>
+    {% for suggestion in suggestions %}
+    <li><a href="/suggestion/{{ suggestion.id }}">{{ suggestion.name }} - {{ suggestion.date }}</a></li>
+    {% endfor %}
+</ul>
+<a href="/">Back to Hackathons</a>
+</body>
+</html>

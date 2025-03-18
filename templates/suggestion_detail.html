@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('.static', filename='style.css')}}">
+    <title>Suggestion Detail</title>
+    <style>
+        table {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        th {
+            text-align: left;
+        }
+
+        td {
+            vertical-align: top;
+            padding: 0.5rem;
+            position: relative;
+        }
+
+        .field-name {
+            font-weight: bold;
+        }
+
+        .checkbox-cell {
+            background-color: #f8f8f8;
+            transition: background-color 0.2s;
+        }
+
+        .checkbox-cell:hover {
+            background-color: #eaeaea;
+            cursor: pointer;
+        }
+
+        .checkbox-label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<h1>Suggestion Detail</h1>
+<form method="post">
+    <table>
+        <thead>
+        <tr>
+            <th>Field</th>
+            <th>Old Value</th>
+            <th>New Value</th>
+            <th>Accept</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for field in ['image', 'name', 'description', 'date', 'location'] %}
+        <tr>
+            <td class="field-name">{{ field.capitalize() }}</td>
+            <td>{{ hackathon[field] }}</td>
+            <td>{{ suggestion[field] }}</td>
+            <td class="checkbox-cell">
+                <input type="checkbox" id="accept_{{ field }}" name="accept_{{ field }}">
+                <label for="accept_{{ field }}" class="checkbox-label"></label>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">Submit</button>
+</form>
+<a href="/suggestions">Back to Suggestions</a>
+</body>
+</html>

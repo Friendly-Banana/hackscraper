@@ -15,7 +15,6 @@ class Hackathon:
 @dataclass
 class HackathonModel:
     id: int
-    created_at: datetime.datetime
     url: str
     image: str
     name: str
@@ -33,5 +32,4 @@ class ScraperModel:
     url: str
     last_scraped: datetime.datetime
     next_scrape: datetime.date
-    frequency: int
     from_scraper: int

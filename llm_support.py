@@ -14,7 +14,8 @@ def ask(question: str, context: str) -> str:
     return qa_model(question=question, context=context)["answer"].strip()
 
 
-def fill_in(hack: Hackathon, context: str) -> Hackathon:
+def fill_in(context: str) -> Hackathon:
+    hack = Hackathon("", "", "", "", "", "")
     hack.name = ask(name, context)
     hack.description = ask(description, context)
     hack.date = ask(date, context)

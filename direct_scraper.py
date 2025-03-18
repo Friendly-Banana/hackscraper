@@ -5,7 +5,7 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
-# from llm_support import fill_in
+from llm_support import fill_in
 from models import Hackathon
 
 
@@ -46,10 +46,10 @@ def get_hackathon(url: str) -> list[Hackathon]:
             case "og:site_name":
                 hack.location = meta["content"]
 
-    # text = soup.find("body").get_text("\n", strip=True)
-    # todo use edit for llm
-    # fill_in(hack, text)
-    return [hack]
+    text = soup.find("body").get_text("\n", strip=True)
+    llm_suggestion = fill_in(text)
+    logging.info(llm_suggestion)
+    return [hack, llm_suggestion]
 
 
 def devpost(_url: str) -> list[Hackathon]:
@@ -129,6 +129,7 @@ def n3xtcoder(_url: str) -> list[Hackathon]:
 
 
 class DirectScraperType(Enum):
+    LLM = -1
     GENERIC = 0
     DEVPOST = 1
     UNTERNEHMER_TUM = 2
