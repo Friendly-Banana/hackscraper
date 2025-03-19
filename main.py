@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS scraper(
 # LLM suggestions
 cur.execute(
     """INSERT INTO scraper (id, direct, type, url, next_scrape) VALUES (0, true, ?, 'LLM', NULL) ON CONFLICT DO NOTHING""",
-    (DirectScraperType.LLM,),
+    (DirectScraperType.LLM.value,),
 )
 cur.execute("""
 CREATE TABLE IF NOT EXISTS hackathon(

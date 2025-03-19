@@ -13,7 +13,7 @@ def html(url: str):
     response = requests.get(url)
     if response.ok:
         return BeautifulSoup(response.text, "html.parser")
-    print(
+    logging.warning(
         f"Failed to scrape {url}, status code: {response.status_code}, reason: {response.reason}"
     )
 
@@ -21,11 +21,8 @@ def html(url: str):
 def json(url: str):
     response = requests.get(url)
     if response.ok:
-        try:
-            return response.json()
-        except Exception as e:
-            print(f"Failed to parse JSON from {url}: {e}")
-    print(
+        return response.json()
+    logging.warning(
         f"Failed to scrape {url}, status code: {response.status_code}, reason: {response.reason}"
     )
 
@@ -48,7 +45,7 @@ def get_hackathon(url: str) -> list[Hackathon]:
 
     text = soup.find("body").get_text("\n", strip=True)
     llm_suggestion = fill_in(text)
-    logging.info(llm_suggestion)
+    logging.info(hack, llm_suggestion)
     return [hack, llm_suggestion]
 
 
@@ -128,6 +125,42 @@ def n3xtcoder(_url: str) -> list[Hackathon]:
     return hacks
 
 
+def taikai_network(_url):
+    url = "https://api.taikai.network/api/graphql"
+    headers = {'Referer': 'https://taikai.network/', 'Origin': 'https://taikai.network'}
+    payload = {
+        'operationName': 'ALL_CHALLENGES_QUERY',
+        'variables': {
+            'sortBy': {
+                'order': 'desc',
+            },
+            'page': 1,
+        },
+        'query': 'query ALL_CHALLENGES_QUERY($sortBy: ChallengeOrderByWithRelationInput, $page: Int) {  challenges(where: {publishInfo: {state: {equals: ACTIVE}}, isClosed: {equals: false}}, page: $page, orderBy: $sortBy) {\n    id\n    name\n    isClosed\n    shortDescription\n    cardImageFile {\n      id\n      url\n      __typename\n    }\n    organization {\n      id\n      name\n      slug\n      __typename\n    }\n    steps {\n      id\n      startDate\n      __typename\n    }\n    currentStep {\n      id\n      name\n      startDate\n      __typename\n    }\n    slug\n    order\n    __typename\n  }\n}',
+    }
+    response = requests.post(url, headers=headers, json=payload)
+    if not response.ok:
+        logging.warning(
+            f"Failed to scrape {url}, status code: {response.status_code}, reason: {response.reason}"
+        )
+        return
+    data = response.json()
+    hacks = []
+    for challenge in data["data"]["challenges"]:
+        hacks.append(
+            Hackathon(
+                url=f"https://taikai.network/{challenge['organization']['slug']}/hackathons/{challenge['slug']}",
+                image=challenge["cardImageFile"]["url"],
+                name=challenge["name"],
+                description=challenge["shortDescription"],
+                date=challenge["steps"][-1]["startDate"],
+                location="",
+            )
+        )
+
+    return hacks
+
+
 class DirectScraperType(Enum):
     LLM = -1
     GENERIC = 0
@@ -135,6 +168,7 @@ class DirectScraperType(Enum):
     UNTERNEHMER_TUM = 2
     HUAWEI = 3
     N3XTCODER = 4
+    TAIKAI_NETWORK = 5
 
 
 direct_scrapers = {
@@ -143,4 +177,5 @@ direct_scrapers = {
     DirectScraperType.UNTERNEHMER_TUM: unternehmertum,
     DirectScraperType.HUAWEI: huawei,
     DirectScraperType.N3XTCODER: n3xtcoder,
+    DirectScraperType.TAIKAI_NETWORK: taikai_network,
 }
