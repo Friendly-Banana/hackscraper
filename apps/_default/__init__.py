@@ -11,6 +11,6 @@ from .models import db
 from .tasks import scheduler
 
 # optional parameters
-__version__ = "0.0.0"
-__author__ = "you <you@example.com>"
-__license__ = "anything you want"
+__version__ = "0.0.1"
+__author__ = "Gabriel me@gabriels.cloud>"
+__license__ = "ARR"

@@ -14,7 +14,7 @@ MODE = os.environ.get("PY4WEB_MODE")
 
 # db settings
 APP_FOLDER = os.path.dirname(__file__)
-APP_NAME = os.path.split(APP_FOLDER)[-1]
+APP_NAME = "hackathon"
 
 # DB_FOLDER:    Sets the place where migration files will be created
 #               and is the store location for SQLite databases
@@ -41,7 +41,7 @@ REQUIRES_APPROVAL = False
 
 # auto login after registration
 # requires False VERIFY_EMAIL & REQUIRES_APPROVAL
-LOGIN_AFTER_REGISTRATION = False
+LOGIN_AFTER_REGISTRATION = True
 
 # ALLOWED_ACTIONS in API / default Forms:
 # ["all"]
