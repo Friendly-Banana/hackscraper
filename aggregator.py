@@ -39,14 +39,14 @@ def tum_venture_labs(_url: str) -> set[str]:
     return {urljoin("https://www.tum-venture-labs.de/", a["href"]) for a in links}
 
 
-class AggregatorType(Enum):
+class Aggregator(Enum):
     GENERIC = 0
     TUM_THINK_TANK = 1
     TUM_VENTURE_LABS = 2
 
 
 aggregator_scrapers = {
-    AggregatorType.GENERIC: get_links,
-    AggregatorType.TUM_THINK_TANK: tum_think_tank,
-    AggregatorType.TUM_VENTURE_LABS: tum_venture_labs,
+    Aggregator.GENERIC: get_links,
+    Aggregator.TUM_THINK_TANK: tum_think_tank,
+    Aggregator.TUM_VENTURE_LABS: tum_venture_labs,
 }

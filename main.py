@@ -1,9 +1,9 @@
 import logging
 import sqlite3
 
-from aggregator import AggregatorType, aggregator_scrapers
+from aggregator import Aggregator, aggregator_scrapers
 from config import DEFAULT_SCRAPE_FREQUENCY
-from direct_scraper import DirectScraperType, direct_scrapers
+from direct_scraper import DirectScraper, direct_scrapers
 from models import ScraperModel, Hackathon, HackathonModel
 
 logging.basicConfig(level=logging.INFO)
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS scraper(
 # LLM suggestions
 cur.execute(
     """INSERT INTO scraper (id, direct, type, url, next_scrape) VALUES (0, true, ?, 'LLM', NULL) ON CONFLICT DO NOTHING""",
-    (DirectScraperType.LLM.value,),
+    (DirectScraper.LLM.value,),
 )
 cur.execute("""
 CREATE TABLE IF NOT EXISTS hackathon(
@@ -116,9 +116,9 @@ logging.info("Fetching %d pages...", len(all_scraper))
 for scraper in all_scraper:
     try:
         if scraper.direct:
-            scrape = direct_scrapers[DirectScraperType(scraper.type)]
+            scrape = direct_scrapers[DirectScraper(scraper.type)]
         else:
-            scrape = aggregator_scrapers[AggregatorType(scraper.type)]
+            scrape = aggregator_scrapers[Aggregator(scraper.type)]
         links_or_hackathons = scrape(scraper.url)
     except Exception as e:
         logging.exception("Page %s failed:", scraper.url, exc_info=e)
@@ -130,7 +130,10 @@ for scraper in all_scraper:
     finally:
         cur.execute(
             "UPDATE scraper SET last_scraped=current_timestamp, next_scrape=datetime(current_timestamp, ?) WHERE id=?",
-            (DEFAULT_SCRAPE_FREQUENCY, scraper.id,),
+            (
+                DEFAULT_SCRAPE_FREQUENCY,
+                scraper.id,
+            ),
         )
         con.commit()
 

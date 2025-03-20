@@ -5,6 +5,7 @@ This is an optional file that defined app level settings such as:
 - i18n settings
 This file is provided as an example:
 """
+
 import os
 
 from py4web.core import required_folder
@@ -109,7 +110,7 @@ LDAP_SETTINGS = {
 T_FOLDER = required_folder(APP_FOLDER, "translations")
 
 # Scheduler settings
-USE_SCHEDULER = False
+USE_SCHEDULER = True
 SCHEDULER_MAX_CONCURRENT_RUNS = 1
 
 # Celery settings (alternative to the build-in scheduler)

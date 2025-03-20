@@ -127,16 +127,16 @@ def n3xtcoder(_url: str) -> list[Hackathon]:
 
 def taikai_network(_url):
     url = "https://api.taikai.network/api/graphql"
-    headers = {'Referer': 'https://taikai.network/', 'Origin': 'https://taikai.network'}
+    headers = {"Referer": "https://taikai.network/", "Origin": "https://taikai.network"}
     payload = {
-        'operationName': 'ALL_CHALLENGES_QUERY',
-        'variables': {
-            'sortBy': {
-                'order': 'desc',
+        "operationName": "ALL_CHALLENGES_QUERY",
+        "variables": {
+            "sortBy": {
+                "order": "desc",
             },
-            'page': 1,
+            "page": 1,
         },
-        'query': 'query ALL_CHALLENGES_QUERY($sortBy: ChallengeOrderByWithRelationInput, $page: Int) {  challenges(where: {publishInfo: {state: {equals: ACTIVE}}, isClosed: {equals: false}}, page: $page, orderBy: $sortBy) {\n    id\n    name\n    isClosed\n    shortDescription\n    cardImageFile {\n      id\n      url\n      __typename\n    }\n    organization {\n      id\n      name\n      slug\n      __typename\n    }\n    steps {\n      id\n      startDate\n      __typename\n    }\n    currentStep {\n      id\n      name\n      startDate\n      __typename\n    }\n    slug\n    order\n    __typename\n  }\n}',
+        "query": "query ALL_CHALLENGES_QUERY($sortBy: ChallengeOrderByWithRelationInput, $page: Int) {  challenges(where: {publishInfo: {state: {equals: ACTIVE}}, isClosed: {equals: false}}, page: $page, orderBy: $sortBy) {\n    id\n    name\n    isClosed\n    shortDescription\n    cardImageFile {\n      id\n      url\n      __typename\n    }\n    organization {\n      id\n      name\n      slug\n      __typename\n    }\n    steps {\n      id\n      startDate\n      __typename\n    }\n    currentStep {\n      id\n      name\n      startDate\n      __typename\n    }\n    slug\n    order\n    __typename\n  }\n}",
     }
     response = requests.post(url, headers=headers, json=payload)
     if not response.ok:
@@ -161,7 +161,7 @@ def taikai_network(_url):
     return hacks
 
 
-class DirectScraperType(Enum):
+class DirectScraper(Enum):
     LLM = -1
     GENERIC = 0
     DEVPOST = 1
@@ -172,10 +172,10 @@ class DirectScraperType(Enum):
 
 
 direct_scrapers = {
-    DirectScraperType.GENERIC: get_hackathon,
-    DirectScraperType.DEVPOST: devpost,
-    DirectScraperType.UNTERNEHMER_TUM: unternehmertum,
-    DirectScraperType.HUAWEI: huawei,
-    DirectScraperType.N3XTCODER: n3xtcoder,
-    DirectScraperType.TAIKAI_NETWORK: taikai_network,
+    DirectScraper.GENERIC: get_hackathon,
+    DirectScraper.DEVPOST: devpost,
+    DirectScraper.UNTERNEHMER_TUM: unternehmertum,
+    DirectScraper.HUAWEI: huawei,
+    DirectScraper.N3XTCODER: n3xtcoder,
+    DirectScraper.TAIKAI_NETWORK: taikai_network,
 }

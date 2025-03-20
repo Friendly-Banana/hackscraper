@@ -25,36 +25,37 @@ session, db, T, auth, and templates are examples of Fixtures.
 Warning: Fixtures MUST be declared with @action.uses({fixtures}) else your app will result in undefined behavior
 """
 
-from py4web import URL, action, redirect, Condition, HTTP
+from py4web import URL, action, redirect, Condition, HTTP, request
 from py4web.utils.grid import Grid, Column
 from yatl.helpers import A
 
-from .common import T, auth, db, groups, flash
+from aggregator import Aggregator
+from direct_scraper import DirectScraper
+from .common import T, auth, db, groups, flash, session
 
 
 @action("index")
-@action.uses("index.html", auth, T)
+@action.uses("index.html", auth, T, db)
 def index():
-    user = auth.get_user()
-    message = T("Hello {first_name}").format(**user) if user else T("Hello")
-    return dict(message=message)
+    hackathons = db(db.hackathon).select(limitby=(0, 10))
+    return dict(hackathons=hackathons)
 
 
 class GridActionButton:
     def __init__(
-            self,
-            url,
-            text,
-            icon,
-            additional_classes="",
-            additional_styles="",
-            override_classes="",
-            override_styles="",
-            message="",
-            append_id=False,
-            name=None,
-            ignore_attribute_plugin=False,
-            **attrs
+        self,
+        url,
+        text,
+        icon,
+        additional_classes="",
+        additional_styles="",
+        override_classes="",
+        override_styles="",
+        message="",
+        append_id=False,
+        name=None,
+        ignore_attribute_plugin=False,
+        **attrs,
     ):
         self.url = url
         self.text = text
@@ -71,29 +72,39 @@ class GridActionButton:
 
 
 def unauthorized():
-    raise HTTP(404)
-    return redirect(URL("index"))
+    raise HTTP(403, "unauthorized")
 
 
-admin_only = action.uses("admin/grid.html", db, auth.user, T, Condition(lambda: 'admin' in groups.get(auth.user_id), on_false=unauthorized))
+admin_only = action.uses(
+    "admin/grid.html",
+    db,
+    auth.user,
+    T,
+    Condition(lambda: "admin" in groups.get(auth.user_id), on_false=unauthorized),
+)
 
 
 @action("admin")
 @admin_only
 def admin_index():
-    redirect(URL("admin/hackathon/select"))
+    redirect(URL("admin/hackathons/select"))
 
 
-@action("admin/hackathon/<path:path>", method=["POST", "GET"])
+@action("admin/hackathons/<path:path>", method=["POST", "GET"])
 @admin_only
 def hackathon(path=None):
-    search_queries = [[
-        "All",
-        lambda value: db.hackathon.name.contains(value) | (db.hackathon.description.contains(value)) |
-                      (db.hackathon.date.contains(value) | (db.hackathon.location.contains(value)))],
+    search_queries = [
+        [
+            "All",
+            lambda value: db.hackathon.name.contains(value)
+            | (db.hackathon.description.contains(value))
+            | (
+                db.hackathon.date.contains(value)
+                | (db.hackathon.location.contains(value))
+            ),
+        ],
         ["By Name", lambda value: db.hackathon.name.contains(value)],
         ["By Description", lambda value: db.hackathon.description.contains(value)],
-
     ]
 
     orderby = [db.hackathon.name]
@@ -110,16 +121,34 @@ def hackathon(path=None):
     return dict(grid=grid)
 
 
-@action("admin/scraper/<path:path>", method=["POST", "GET"])
+@action("admin/schedule_scraper/<scraper:int>", method=["POST", "GET"])
+@admin_only
+def schedule_scraper(scraper):
+    pass
+
+
+@action("admin/scrapers/<path:path>", method=["POST", "GET"])
 @admin_only
 def scraper(path=None):
-    search_queries = [["By URL", lambda value: db.scraper.url.contains(value)], ]
+    search_queries = [
+        ["By URL", lambda value: db.scraper.url.contains(value)],
+    ]
+
+    pre_action_buttons = [
+        lambda row: GridActionButton(
+            f"/admin/schedule_scraper/{row.id}",
+            "Schedule",
+            "fas fa-play",
+            name="grid-edit-button",
+        )
+    ]
 
     grid = Grid(
         path,
         db.scraper,
         search_queries=search_queries,
         orderby=db.scraper.next_scrape,
+        pre_action_buttons=pre_action_buttons,
         T=T,
     )
 
@@ -128,13 +157,19 @@ def scraper(path=None):
     return dict(grid=grid)
 
 
-@action("admin/user/<path:path>", method=["POST", "GET"])
+@action("admin/users/<path:path>", method=["POST", "GET"])
 @admin_only
 def user(path=None):
-    search_queries = [["By Name", lambda value: db.auth_user.username.contains(value) | db.auth_user.first_name.contains(
-        value) | db.auth_user.last_name.contains(value)],
-                      ["By Email", lambda value: db.auth_user.email.contains(value)],
-                      ["By Group", lambda value: db.auth_user_tag_groups.tagpath.contains(value)], ]
+    search_queries = [
+        [
+            "By Name",
+            lambda value: db.auth_user.username.contains(value)
+            | db.auth_user.first_name.contains(value)
+            | db.auth_user.last_name.contains(value),
+        ],
+        ["By Email", lambda value: db.auth_user.email.contains(value)],
+        ["By Group", lambda value: db.auth_user_tag_groups.tagpath.contains(value)],
+    ]
 
     grid = Grid(
         path,
@@ -144,41 +179,56 @@ def user(path=None):
         T=T,
     )
 
-    grid.columns.insert(0,
-                        Column(T("Groups"),
-                               lambda row: ", ".join(tag.tagpath for tag in db(db.auth_user_tag_groups.record_id == row.id).select()))
-                        )
+    grid.columns.insert(
+        0,
+        Column(
+            T("Groups"),
+            lambda row: ", ".join(
+                tag.tagpath
+                for tag in db(db.auth_user_tag_groups.record_id == row.id).select()
+            ),
+        ),
+    )
 
     return dict(grid=grid)
 
 
-@action("admin/suggestions/<suggestion_id:int>", method=["GET", "POST"])
-@action.uses("admin/suggestion.html", db, auth. user, T, Condition(lambda: 'admin' in groups. get(auth. user_id), on_false=unauthorized), flash)
-def suggestion_detail(suggestion_id=None):
-    suggestion = db.suggestion[suggestion_id]
-    if not suggestion:
-        flash.set(T("Suggestion not found"))
-        redirect(URL("admin/suggestion/select"))
+@action("admin/tasks/<path:path>", method=["POST", "GET"])
+@admin_only
+def user(path=None):
+    search_queries = [
+        [
+            "By Name",
+            lambda value: db.auth_user.username.contains(value)
+            | db.auth_user.first_name.contains(value)
+            | db.auth_user.last_name.contains(value),
+        ],
+        ["By Email", lambda value: db.auth_user.email.contains(value)],
+        ["By Group", lambda value: db.auth_user_tag_groups.tagpath.contains(value)],
+    ]
 
-    # Get the related hackathon
-    hackathon = db.hackathon[suggestion.hackathon_id]
-    if not hackathon:
-        flash.set(T("Hackathon not found"))
-        redirect(URL("admin/suggestion/select"))
+    grid = Grid(
+        path,
+        db.task_run,
+        T=T,
+    )
+
+    return dict(grid=grid)
 
 
-    return dict(suggestion=suggestion, hackathon=hackathon)
-
-
-@action("admin/suggestion/<path:path>", method=["POST", "GET"])
+@action("admin/suggestions/<path:path>", method=["POST", "GET"])
 @admin_only
 def suggestion(path=None):
-    search_queries = [["By Name", lambda value: db.suggestion.name.contains(value)], ]
+    search_queries = [
+        ["By Name", lambda value: db.suggestion.name.contains(value)],
+    ]
 
     pre_action_buttons = [
         lambda row: GridActionButton(
-            f"/admin/suggestions/{row.id}",
-            "Accept", "fas fa-edit", name="grid-edit-button"
+            f"/admin/suggestion/{row.id}",
+            "Accept",
+            "fas fa-edit",
+            name="grid-edit-button",
         )
     ]
 
@@ -194,3 +244,51 @@ def suggestion(path=None):
     )
 
     return dict(grid=grid)
+
+
+@action("admin/suggestion/<suggestion_id:int>", method=["GET", "POST"])
+@action.uses(
+    "admin/suggestion.html",
+    db,
+    session,
+    auth.user,
+    T,
+    Condition(lambda: "admin" in groups.get(auth.user_id), on_false=unauthorized),
+    flash,
+)
+def suggestion_detail(suggestion_id=None):
+    suggestion = db.suggestion[suggestion_id]
+    if not suggestion:
+        flash.set(T("Suggestion not found"))
+        return redirect(URL("admin/suggestions/select"))
+
+    # Get the related hackathon
+    hackathon = db.hackathon[suggestion.hackathon_id]
+    if not hackathon:
+        flash.set(T("Hackathon not found"))
+        return redirect(URL("admin/suggestions/select"))
+
+    if request.method == "POST":
+        print(request.forms)
+        apply_fields = request.forms
+        if "name" in apply_fields:
+            hackathon.update_record(name=suggestion.name)
+        if "image" in apply_fields:
+            hackathon.update_record(image=suggestion.image)
+        if "description" in apply_fields:
+            hackathon.update_record(description=suggestion.description)
+        if "date" in apply_fields:
+            hackathon.update_record(date=suggestion.date)
+        if "location" in apply_fields:
+            hackathon.update_record(location=suggestion.location)
+        suggestion.delete_record()
+        db.commit()
+        flash.set(T("Fields applied successfully"))
+        return redirect(URL("admin/suggestions/select"))
+
+    scraper_type = (
+        DirectScraper(suggestion.from_scraper.type)
+        if suggestion.from_scraper.direct
+        else (Aggregator(suggestion.from_scraper.type))
+    )
+    return dict(suggestion=suggestion, hackathon=hackathon, scraper_type=scraper_type)

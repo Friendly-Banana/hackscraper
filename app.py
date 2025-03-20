@@ -2,9 +2,9 @@ import sqlite3
 
 from flask import Flask, render_template, request, redirect
 
-from aggregator import AggregatorType
+from aggregator import Aggregator
 from config import DEFAULT_SCRAPE_FREQUENCY
-from direct_scraper import DirectScraperType
+from direct_scraper import DirectScraper
 
 app = Flask(__name__)
 
@@ -37,14 +37,14 @@ def scrapers():
     scrapers = conn.execute("SELECT * FROM scraper").fetchall()
     conn.close()
 
-    direct_types = {t.value: t.name for t in DirectScraperType}
-    aggregator_types = {t.value: t.name for t in AggregatorType}
+    direct_types = {t.value: t.name for t in DirectScraper}
+    aggregator_types = {t.value: t.name for t in Aggregator}
 
     return render_template(
         "scrapers.html",
         scrapers=scrapers,
         direct_types=direct_types,
-        aggregator_types=aggregator_types
+        aggregator_types=aggregator_types,
     )
 
 
@@ -60,7 +60,7 @@ def edit_scraper(scraper_id):
 
         conn.execute(
             "UPDATE scraper SET direct = ?, type = ?, url = ? WHERE id = ?",
-            (direct, scraper_type, url, scraper_id)
+            (direct, scraper_type, url, scraper_id),
         )
         conn.commit()
         conn.close()
@@ -75,18 +75,18 @@ def edit_scraper(scraper_id):
         conn.close()
         return "Scraper not found", 404
 
-    from direct_scraper import DirectScraperType
-    from aggregator import AggregatorType
+    from direct_scraper import DirectScraper
+    from aggregator import Aggregator
 
-    direct_scraper_types = list(DirectScraperType)
-    aggregator_scraper_types = list(AggregatorType)
+    direct_scraper_types = list(DirectScraper)
+    aggregator_scraper_types = list(Aggregator)
 
     conn.close()
     return render_template(
         "edit_scraper.html",
         scraper=scraper,
         direct_scraper_types=direct_scraper_types,
-        aggregator_scraper_types=aggregator_scraper_types
+        aggregator_scraper_types=aggregator_scraper_types,
     )
 
 
@@ -101,8 +101,8 @@ def delete_scraper(scraper_id):
 
 @app.route("/scraper/<int:id>/run", methods=["POST"])
 def run_scraper(id):
-    from direct_scraper import direct_scrapers, DirectScraperType
-    from aggregator import aggregator_scrapers, AggregatorType
+    from direct_scraper import direct_scrapers, DirectScraper
+    from aggregator import aggregator_scrapers, Aggregator
     from models import ScraperModel
     import logging
 
@@ -118,7 +118,7 @@ def run_scraper(id):
     logging.debug("Scraping %s", scraper.url)
     try:
         if scraper.direct:
-            scrape = direct_scrapers[DirectScraperType(scraper.type)]
+            scrape = direct_scrapers[DirectScraper(scraper.type)]
             links_or_hackathons = scrape(scraper.url)
 
             # Upsert hackathons
@@ -128,11 +128,11 @@ def run_scraper(id):
                 ).fetchone()
                 if existing:
                     if (
-                            existing["image"] != hack.image
-                            or existing["name"] != hack.name
-                            or existing["description"] != hack.description
-                            or existing["date"] != hack.date
-                            or existing["location"] != hack.location
+                        existing["image"] != hack.image
+                        or existing["name"] != hack.name
+                        or existing["description"] != hack.description
+                        or existing["date"] != hack.date
+                        or existing["location"] != hack.location
                     ):
                         conn.execute(
                             """INSERT INTO suggestion (image, name, description, date, location, hackathon_id, scraper_id) VALUES (?, ?, ?, ?, ?, ?, ?)""",
@@ -160,7 +160,7 @@ def run_scraper(id):
                         ),
                     )
         else:
-            scrape = aggregator_scrapers[AggregatorType(scraper.type)]
+            scrape = aggregator_scrapers[Aggregator(scraper.type)]
             links = scrape(scraper.url)
 
             for link in links:
@@ -173,7 +173,10 @@ def run_scraper(id):
     finally:
         conn.execute(
             "UPDATE scraper SET last_scraped=current_timestamp, next_scrape=datetime(current_timestamp, ?) WHERE id=?",
-            (DEFAULT_SCRAPE_FREQUENCY, scraper.id,),
+            (
+                DEFAULT_SCRAPE_FREQUENCY,
+                scraper.id,
+            ),
         )
         conn.commit()
         conn.close()
@@ -210,6 +213,7 @@ def delete_hackathon(hackathon_id):
     conn.commit()
     conn.close()
     return redirect("/admin")
+
 
 @app.route("/suggestions")
 def suggestions():
@@ -268,8 +272,8 @@ def add_scraper():
         conn.close()
         return redirect("/scrapers")
 
-    direct_scraper_types = list(DirectScraperType)
-    aggregator_scraper_types = list(AggregatorType)
+    direct_scraper_types = list(DirectScraper)
+    aggregator_scraper_types = list(Aggregator)
     return render_template(
         "add_scraper.html",
         direct_scraper_types=direct_scraper_types,

@@ -1,15 +1,16 @@
 [[extend 'layout.html']]
 
 [[block page_head]]
-<title>Admin Hackathons</title>
+<title>Admin Area</title>
 [[end]]
 
 [[block page_left_menu]]
 <ul>
-    <li><a href="[[=URL('admin', 'hackathon', 'select')]]">Hackathons</a></li>
-    <li><a href="[[=URL('admin', 'scraper', 'select')]]">Scrapers</a></li>
-    <li><a href="[[=URL('admin', 'suggestion', 'select')]]">Suggestions</a></li>
-    <li><a href="[[=URL('admin', 'user', 'select')]]">Users</a></li>
+    <li><a href="[[=URL('admin', 'hackathons', 'select')]]">Hackathons</a></li>
+    <li><a href="[[=URL('admin', 'scrapers', 'select')]]">Scrapers</a></li>
+    <li><a href="[[=URL('admin', 'tasks', 'select')]]">Tasks</a></li>
+    <li><a href="[[=URL('admin', 'suggestions', 'select')]]">Suggestions</a></li>
+    <li><a href="[[=URL('admin', 'users', 'select')]]">Users</a></li>
 </ul>
 [[end]]
 

@@ -1,0 +1,51 @@
+[[extend 'layout.html']]
+
+[[block page_head]]
+<title>Review Suggestion [[=suggestion.id]]</title>
+[[end]]
+
+<form method="POST" action="">
+    <table>
+        <thead>
+        <tr>
+            <th>Field</th>
+            <th><a href="[[=hackathon.url]]">Hackathon</a></th>
+            <th>Suggestion</th>
+            <th>Apply</th>
+        </tr>
+        </thead>
+        <tbody>
+        [[ for field in ['name', 'image', 'description', 'date', 'location']: ]]
+        <tr>
+            <td>[[= field.capitalize() ]]</td>
+            <td>[[= getattr(hackathon, field) ]]</td>
+            <td>[[= getattr(suggestion, field) ]]</td>
+            <td class="checkbox-cell">
+                <input type="checkbox" id="accept_[[= field ]]" name="[[= field ]]">
+                <label for="accept_[[= field ]]" class="checkbox-label"></label>
+            </td>
+        </tr>
+        [[pass]]
+        </tbody>
+    </table>
+    <button type="submit">Apply Selected Fields</button>
+</form>
+
+<style>
+    tr {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .checkbox-label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+</style>
+
+<p>Scraped by <a href="/admin/scrapers/select/[[=suggestion.from_scraper]]">[[=scraper_type]]</a> at
+    [[=suggestion.created_at]]</p>
