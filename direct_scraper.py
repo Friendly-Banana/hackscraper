@@ -11,20 +11,21 @@ from models import Hackathon
 
 def html(url: str):
     response = requests.get(url)
-    if response.ok:
-        return BeautifulSoup(response.text, "html.parser")
-    logging.warning(
-        f"Failed to scrape {url}, status code: {response.status_code}, reason: {response.reason}"
-    )
+    response.raise_for_status()
+    return BeautifulSoup(response.text, "html.parser")
 
 
 def json(url: str):
     response = requests.get(url)
-    if response.ok:
-        return response.json()
-    logging.warning(
-        f"Failed to scrape {url}, status code: {response.status_code}, reason: {response.reason}"
-    )
+    response.raise_for_status()
+    return response.json()
+
+
+def split_title(hack: Hackathon, title: str):
+    parts = title.replace("–", "-").split(" - ")
+    hack.name = parts[0].strip()
+    if len(parts) > 1 and not hack.description:
+        hack.description = " - ".join(parts[1:])
 
 
 def get_hackathon(url: str) -> list[Hackathon]:
@@ -35,7 +36,7 @@ def get_hackathon(url: str) -> list[Hackathon]:
             case "og:image":
                 hack.image = meta["content"]
             case "og:title":
-                hack.name = meta["content"]
+                split_title(hack, meta["content"])
             case "og:description":
                 hack.description = meta["content"]
             case "og:url":
@@ -44,7 +45,8 @@ def get_hackathon(url: str) -> list[Hackathon]:
                 hack.location = meta["content"]
 
     text = soup.find("body").get_text("\n", strip=True)
-    llm_suggestion = fill_in(text)
+    llm_hack = Hackathon(url, "", "", "", "", "")
+    llm_suggestion = fill_in(llm_hack, text)
     logging.info(hack, llm_suggestion)
     return [hack, llm_suggestion]
 
@@ -58,9 +60,9 @@ def devpost(_url: str) -> list[Hackathon]:
         hacks.append(
             Hackathon(
                 url=hack["url"],
-                image=hack["thumbnail_url"],
+                image="https:" + hack["thumbnail_url"],
                 name=hack["title"],
-                description=f"Prize: {hack['prize_amount']}, Registrations: {hack['registrations_count']}",
+                description=", ".join(theme["name"] for theme in hack["themes"]),
                 date=hack["submission_period_dates"],
                 location=hack["displayed_location"]["location"],
             )
@@ -112,16 +114,16 @@ def n3xtcoder(_url: str) -> list[Hackathon]:
         if card["typeOfEvent"] != "hackathon":
             continue
         time = card["timeFrame"]
-        hacks.append(
-            Hackathon(
-                url=urljoin("https://n3xtcoder.org/", card["slug"]),
-                image="assets/n3xtcoder.png",
-                name=card["title"],
-                description="",
-                date=f"{time[['starttime']]} - {time['endtime']}",
-                location="",
-            )
+        hack = Hackathon(
+            url=urljoin("https://n3xtcoder.org/", card["slug"]),
+            image="assets/n3xtcoder.png",
+            name="",
+            description="",
+            date=f"{time['starttime']} - {time['endtime']}",
+            location="",
         )
+        split_title(hack, card["title"])
+        hacks.append(hack)
     return hacks
 
 
@@ -138,12 +140,8 @@ def taikai_network(_url):
         },
         "query": "query ALL_CHALLENGES_QUERY($sortBy: ChallengeOrderByWithRelationInput, $page: Int) {  challenges(where: {publishInfo: {state: {equals: ACTIVE}}, isClosed: {equals: false}}, page: $page, orderBy: $sortBy) {\n    id\n    name\n    isClosed\n    shortDescription\n    cardImageFile {\n      id\n      url\n      __typename\n    }\n    organization {\n      id\n      name\n      slug\n      __typename\n    }\n    steps {\n      id\n      startDate\n      __typename\n    }\n    currentStep {\n      id\n      name\n      startDate\n      __typename\n    }\n    slug\n    order\n    __typename\n  }\n}",
     }
-    response = requests.post(url, headers=headers, json=payload)
-    if not response.ok:
-        logging.warning(
-            f"Failed to scrape {url}, status code: {response.status_code}, reason: {response.reason}"
-        )
-        return
+    response = requests.post(url, headers=headers, payload=payload)
+    response.raise_for_status()
     data = response.json()
     hacks = []
     for challenge in data["data"]["challenges"]:
