@@ -3,18 +3,14 @@ This file defines cache, session, and translator T object for the app
 These are fixtures that every app needs so probably you will not be editing this file
 """
 
-import os
-import sys
-
-from pydal.tools.scheduler import Scheduler
-from pydal.tools.tags import Tags
-
-from py4web import DAL, Cache, Field, Flash, Session, Translator, action
+from py4web import DAL, Cache, Session, Translator, action
 from py4web.server_adapters.logging_utils import make_logger
 from py4web.utils.auth import Auth
 from py4web.utils.downloader import downloader
 from py4web.utils.factories import ActionFactory
 from py4web.utils.mailer import Mailer
+from pydal.tools.scheduler import Scheduler
+from pydal.tools.tags import Tags
 
 from . import settings
 
@@ -60,8 +56,6 @@ elif settings.SESSION_TYPE == "redis":
     session = Session(secret=settings.SESSION_SECRET_KEY, storage=conn)
 
 elif settings.SESSION_TYPE == "memcache":
-    import time
-
     import memcache
 
     conn = memcache.Client(settings.MEMCACHE_CLIENTS, debug=0)
@@ -215,8 +209,10 @@ if settings.UPLOAD_FOLDER:
 # Define and optionally start the scheduler
 # #######################################################
 if settings.USE_SCHEDULER:
+    child = logger.getChild(".scheduler")
+    child.setLevel("WARNING")
     scheduler = Scheduler(
-        db, logger=logger, max_concurrent_runs=settings.SCHEDULER_MAX_CONCURRENT_RUNS
+        db, logger=child, max_concurrent_runs=settings.SCHEDULER_MAX_CONCURRENT_RUNS
     )
     scheduler.start()
 else:

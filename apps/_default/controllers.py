@@ -31,7 +31,7 @@ from yatl.helpers import A
 
 from aggregator import Aggregator
 from direct_scraper import DirectScraper
-from .common import T, auth, db, groups, flash, session
+from .common import T, auth, db, groups, flash, session, scheduler
 
 
 @action("index")
@@ -97,11 +97,9 @@ def hackathon(path=None):
         [
             "All",
             lambda value: db.hackathon.name.contains(value)
-            | (db.hackathon.description.contains(value))
-            | (
-                db.hackathon.date.contains(value)
-                | (db.hackathon.location.contains(value))
-            ),
+            | db.hackathon.description.contains(value)
+            | db.hackathon.date.contains(value)
+            | db.hackathon.location.contains(value),
         ],
         ["By Name", lambda value: db.hackathon.name.contains(value)],
         ["By Description", lambda value: db.hackathon.description.contains(value)],
@@ -124,12 +122,24 @@ def hackathon(path=None):
 @action("admin/schedule_scraper/<scraper:int>", method=["POST", "GET"])
 @admin_only
 def schedule_scraper(scraper):
-    pass
+    if request.headers["Sec-Fetch-Site"] not in ["same-origin", "none"]:
+        flash.set(T("Evil cross-origin request"), "warning")
+        return redirect(URL("admin/scrapers/select"))
+
+    scheduler.enqueue_run(
+        "run_scraper",
+        "Manually scheduled",
+        inputs={"scraper": scraper},
+        timeout=3 * 60,
+        priority=-1,
+    )
+    flash.set(T("Scraper scheduled"))
+    return redirect(URL("admin/scrapers/select"))
 
 
 @action("admin/scrapers/<path:path>", method=["POST", "GET"])
 @admin_only
-def scraper(path=None):
+def scrapers(path=None):
     search_queries = [
         ["By URL", lambda value: db.scraper.url.contains(value)],
     ]
@@ -147,7 +157,6 @@ def scraper(path=None):
         path,
         db.scraper,
         search_queries=search_queries,
-        orderby=db.scraper.next_scrape,
         pre_action_buttons=pre_action_buttons,
         T=T,
     )
@@ -159,7 +168,7 @@ def scraper(path=None):
 
 @action("admin/users/<path:path>", method=["POST", "GET"])
 @admin_only
-def user(path=None):
+def users(path=None):
     search_queries = [
         [
             "By Name",
@@ -180,12 +189,11 @@ def user(path=None):
     )
 
     grid.columns.insert(
-        0,
+        2,
         Column(
             T("Groups"),
             lambda row: ", ".join(
-                tag.tagpath
-                for tag in db(db.auth_user_tag_groups.record_id == row.id).select()
+                tag.tagpath for tag in db(groups.tag_table.record_id == row.id).select()
             ),
         ),
     )
@@ -195,21 +203,19 @@ def user(path=None):
 
 @action("admin/tasks/<path:path>", method=["POST", "GET"])
 @admin_only
-def user(path=None):
+def tasks(path=None):
     search_queries = [
         [
-            "By Name",
-            lambda value: db.auth_user.username.contains(value)
-            | db.auth_user.first_name.contains(value)
-            | db.auth_user.last_name.contains(value),
+            "By Name or Description",
+            lambda value: db.task_run.name.contains(value)
+            | db.task_run.description.contains(value),
         ],
-        ["By Email", lambda value: db.auth_user.email.contains(value)],
-        ["By Group", lambda value: db.auth_user_tag_groups.tagpath.contains(value)],
     ]
 
     grid = Grid(
         path,
         db.task_run,
+        search_queries=search_queries,
         T=T,
     )
 
@@ -269,7 +275,6 @@ def suggestion_detail(suggestion_id=None):
         return redirect(URL("admin/suggestions/select"))
 
     if request.method == "POST":
-        print(request.forms)
         apply_fields = request.forms
         if "name" in apply_fields:
             hackathon.update_record(name=suggestion.name)
@@ -286,7 +291,7 @@ def suggestion_detail(suggestion_id=None):
         flash.set(T("Fields applied successfully"))
         return redirect(URL("admin/suggestions/select"))
 
-    scraper_type = (
+    scraper_type = suggestion.from_scraper and (
         DirectScraper(suggestion.from_scraper.type)
         if suggestion.from_scraper.direct
         else (Aggregator(suggestion.from_scraper.type))

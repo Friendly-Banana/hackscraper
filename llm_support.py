@@ -7,15 +7,17 @@ description = "What is the hackathon about?"
 date = "When is the hackathon?"
 location = "Where is the hackathon?"
 
-qa_model = pipeline("question-answering", "timpal0l/mdeberta-v3-base-squad2")
+qa_model = None
 
 
 def ask(question: str, context: str) -> str:
+    global qa_model
+    if qa_model is None:
+        qa_model = pipeline("question-answering", "timpal0l/mdeberta-v3-base-squad2")
     return qa_model(question=question, context=context)["answer"].strip()
 
 
-def fill_in(context: str) -> Hackathon:
-    hack = Hackathon("", "", "", "", "", "")
+def fill_in(hack: Hackathon, context: str) -> Hackathon:
     hack.name = ask(name, context)
     hack.description = ask(description, context)
     hack.date = ask(date, context)
