@@ -1,6 +1,6 @@
 import logging
 from enum import Enum
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -10,11 +10,9 @@ from models import Hackathon
 
 
 def html(url: str):
-    # response = requests.get(url)
-    # response.raise_for_status()
-    with open("tests/data/hack.tum.de.html", encoding="utf-8") as file:
-        text = file.read()
-    return BeautifulSoup(text, "html.parser")
+    response = requests.get(url)
+    response.raise_for_status()
+    return BeautifulSoup(response.text, "html.parser")
 
 
 def json(url: str):
@@ -31,7 +29,11 @@ def split_title(hack: Hackathon, title: str):
 
 
 def get_hackathon(url: str) -> list[Hackathon]:
-    soup = html(url)
+    # soup = html(url)
+    host = urlparse(url).netloc
+    with open(f"tests/data/{host}.html", encoding="utf-8") as file:
+        text = file.read()
+    soup = BeautifulSoup(text, "html.parser")
     hack = Hackathon(url, "", "", "", "", "")
     for meta in soup.find_all("meta"):
         match meta.get("property"):

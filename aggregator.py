@@ -8,7 +8,7 @@ from direct_scraper import html
 def get_links(url: str) -> set[str]:
     soup = html(url)
     return {
-        urljoin(url, a["href"])
+        urljoin(url, a["href"].lower())
         for a in soup.find_all("a", href=True)
         if "hackathon" in a["href"].lower()
     }

@@ -54,12 +54,12 @@ def run_scraper(**inputs):
                         db.suggestion.insert(
                             **dataclasses.asdict(hack),
                             hackathon_id=existing.id,
-                            scraper_id=scraper.id,
+                            from_scraper=scraper.id,
                         )
                         suggestions += 1
                 else:
                     db.hackathon.insert(
-                        **dataclasses.asdict(hack), scraper_id=scraper.id
+                        **dataclasses.asdict(hack), from_scraper=scraper.id
                     )
                     new += 1
             result = f"{new} new hackathons, {suggestions} suggestions"
