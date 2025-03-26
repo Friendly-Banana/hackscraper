@@ -10,9 +10,11 @@ from models import Hackathon
 
 
 def html(url: str):
-    response = requests.get(url)
-    response.raise_for_status()
-    return BeautifulSoup(response.text, "html.parser")
+    # response = requests.get(url)
+    # response.raise_for_status()
+    with open("tests/data/hack.tum.de.html", encoding="utf-8") as file:
+        text = file.read()
+    return BeautifulSoup(text, "html.parser")
 
 
 def json(url: str):
@@ -45,9 +47,9 @@ def get_hackathon(url: str) -> list[Hackathon]:
                 hack.location = meta["content"]
 
     text = soup.find("body").get_text("\n", strip=True)
-    llm_hack = Hackathon(url, "", "", "", "", "")
+    # URL may have been set from meta tag
+    llm_hack = Hackathon(hack.url, "", "", "", "", "")
     llm_suggestion = fill_in(llm_hack, text)
-    logging.info(hack, llm_suggestion)
     return [hack, llm_suggestion]
 
 
