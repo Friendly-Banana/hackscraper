@@ -1,3 +1,4 @@
+import json
 import logging
 from enum import Enum
 from urllib.parse import urljoin, urlparse
@@ -5,18 +6,40 @@ from urllib.parse import urljoin, urlparse
 import requests
 from bs4 import BeautifulSoup
 
+from config import REQUESTS_DRY_RUN
 from llm_support import fill_in
 from models import Hackathon
 
 
-def html(url: str):
+def get_html(url: str):
+    if REQUESTS_DRY_RUN:
+        host = urlparse(url).netloc
+        with open(f"tests/data/{host}.html", encoding="utf-8") as file:
+            return BeautifulSoup(file.read(), "html.parser")
+
     response = requests.get(url)
     response.raise_for_status()
     return BeautifulSoup(response.text, "html.parser")
 
 
-def json(url: str):
+def get_json(url: str):
+    if REQUESTS_DRY_RUN:
+        host = urlparse(url).netloc
+        with open(f"tests/data/{host}.json", encoding="utf-8") as file:
+            return json.load(file)
+
     response = requests.get(url)
+    response.raise_for_status()
+    return response.json()
+
+
+def post_json(url: str, body):
+    if REQUESTS_DRY_RUN:
+        host = urlparse(url).netloc
+        with open(f"tests/data/{host}.json", encoding="utf-8") as file:
+            return json.load(file)
+
+    response = requests.post(url, json=body)
     response.raise_for_status()
     return response.json()
 
@@ -29,11 +52,7 @@ def split_title(hack: Hackathon, title: str):
 
 
 def get_hackathon(url: str) -> list[Hackathon]:
-    # soup = html(url)
-    host = urlparse(url).netloc
-    with open(f"tests/data/{host}.html", encoding="utf-8") as file:
-        text = file.read()
-    soup = BeautifulSoup(text, "html.parser")
+    soup = get_html(url)
     hack = Hackathon(url, "", "", "", "", "")
     for meta in soup.find_all("meta"):
         match meta.get("property"):
@@ -56,7 +75,7 @@ def get_hackathon(url: str) -> list[Hackathon]:
 
 
 def devpost(_url: str) -> list[Hackathon]:
-    data = json(
+    data = get_json(
         "https://devpost.com/api/hackathons?open_to[]=public&search=munich&status[]=upcoming&status[]=open"
     )
     hacks = []
@@ -76,7 +95,7 @@ def devpost(_url: str) -> list[Hackathon]:
 
 def unternehmertum(_url: str) -> list[Hackathon]:
     hacks = []
-    soup = html("https://www.unternehmertum.de/events?filter%5B%5D=9511")
+    soup = get_html("https://www.unternehmertum.de/events?filter%5B%5D=9511")
     table_list = soup.find(class_="table-list")
     for event in table_list.find_all("li"):
         url = event.find("a")["href"]
@@ -91,7 +110,7 @@ def unternehmertum(_url: str) -> list[Hackathon]:
 
 def huawei(_url: str) -> list[Hackathon]:
     hacks = []
-    data = json("https://huawei.agorize.com/api/v2/challenges")
+    data = get_json("https://huawei.agorize.com/api/v2/challenges")
     for item in data["data"]:
         attributes = item["attributes"]
         hacks.append(
@@ -111,7 +130,7 @@ def huawei(_url: str) -> list[Hackathon]:
 
 def n3xtcoder(_url: str) -> list[Hackathon]:
     hacks = []
-    data = json(
+    data = get_json(
         "https://n3xtcoder.org/api/event-cards?offset=0&sort=desc&pageSize=6&lang=en"
     )
     for card in data["data"]["cards"]:
@@ -133,8 +152,7 @@ def n3xtcoder(_url: str) -> list[Hackathon]:
 
 def taikai_network(_url):
     url = "https://api.taikai.network/api/graphql"
-    headers = {"Referer": "https://taikai.network/", "Origin": "https://taikai.network"}
-    payload = {
+    body = {
         "operationName": "ALL_CHALLENGES_QUERY",
         "variables": {
             "sortBy": {
@@ -142,11 +160,9 @@ def taikai_network(_url):
             },
             "page": 1,
         },
-        "query": "query ALL_CHALLENGES_QUERY($sortBy: ChallengeOrderByWithRelationInput, $page: Int) {  challenges(where: {publishInfo: {state: {equals: ACTIVE}}, isClosed: {equals: false}}, page: $page, orderBy: $sortBy) {\n    id\n    name\n    isClosed\n    shortDescription\n    cardImageFile {\n      id\n      url\n      __typename\n    }\n    organization {\n      id\n      name\n      slug\n      __typename\n    }\n    steps {\n      id\n      startDate\n      __typename\n    }\n    currentStep {\n      id\n      name\n      startDate\n      __typename\n    }\n    slug\n    order\n    __typename\n  }\n}",
+        "query": "query ALL_CHALLENGES_QUERY($sortBy: ChallengeOrderByWithRelationInput, $page: Int) {  challenges(where: {publishInfo: {state: {equals: ACTIVE}}}, page: $page, orderBy: $sortBy) {\n    id\n    name\n    isClosed\n    shortDescription\n    cardImageFile {\n      id\n      url\n      __typename\n    }\n    organization {\n      id\n      name\n      slug\n      __typename\n    }\n    steps {\n      id\n      startDate\n      __typename\n    }\n    currentStep {\n      id\n      name\n      startDate\n      __typename\n    }\n    slug\n    order\n    __typename\n  }\n}",
     }
-    response = requests.post(url, headers=headers, payload=payload)
-    response.raise_for_status()
-    data = response.json()
+    data = post_json(url, body)
     hacks = []
     for challenge in data["data"]["challenges"]:
         hacks.append(

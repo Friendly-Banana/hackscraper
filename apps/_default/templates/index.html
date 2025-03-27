@@ -1,7 +1,7 @@
 [[extend 'layout.html']]
 
 [[ if hackathons: ]]
-<div class="hackathon-grid">
+<div class="hackathon-grid padded">
     [[ for hackathon in hackathons: ]]
     <div class="hackathon-card">
         [[ if hackathon.image: ]]
@@ -30,13 +30,12 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 20px;
-        margin-top: 20px;
     }
 
     .hackathon-card {
         padding: 20px;
         border-radius: 8px;
-        background-color: #f8f8f8;
+        background-color: var(--b-bg-2);
         transition: transform 0.2s;
         display: flex;
         flex-direction: column;
@@ -66,7 +65,6 @@
     }
 
     .card-metadata {
-        color: #666;
         font-size: 0.9rem;
         margin: 8px 0;
     }

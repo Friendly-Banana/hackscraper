@@ -5,6 +5,8 @@ from urllib.parse import urlparse
 
 from parameterized import parameterized
 
+import config
+
 from direct_scraper import (
     get_hackathon,
     devpost,
@@ -13,9 +15,14 @@ from direct_scraper import (
     n3xtcoder,
     taikai_network,
 )
+from models import Hackathon
 
 
 class TestScrapers(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        config.REQUESTS_DRY_RUN = True
+
     @parameterized.expand(
         [
             (get_hackathon, "https://hack.tum.de"),
@@ -38,7 +45,7 @@ class TestScrapers(unittest.TestCase):
         with open(f"data/{host}.html", encoding="utf-8") as file:
             mock_get.return_value = MagicMock(status_code=200, text=file.read())
         with open(f"expected/{host}.json", encoding="utf-8") as file:
-            expected = json.load(file)
+            expected = json.load(file, object_hook=lambda x: Hackathon(**x))
 
         result = scraper(url)
         self.assertListEqual(expected, result)
@@ -56,7 +63,7 @@ class TestScrapers(unittest.TestCase):
             load = json.load(file)
             mock_get.return_value = MagicMock(status_code=200, json=lambda: load)
         with open(f"expected/{host}.json", encoding="utf-8") as file:
-            expected = json.load(file)
+            expected = json.load(file, object_hook=lambda x: Hackathon(**x))
 
         result = scraper(None)
         self.assertListEqual(expected, result)
@@ -72,7 +79,7 @@ class TestScrapers(unittest.TestCase):
             load = json.load(file)
             mock_post.return_value = MagicMock(status_code=200, json=lambda: load)
         with open(f"expected/{host}.json", encoding="utf-8") as file:
-            expected = json.load(file)
+            expected = json.load(file, object_hook=lambda x: Hackathon(**x))
 
         result = scraper(None)
         self.assertListEqual(expected, result)

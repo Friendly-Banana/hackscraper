@@ -5,20 +5,35 @@
     padding: 1.5em;
 }
 
+.py4web-validation-error {
+    margin-top: -16px;
+    font-size: 0.8em;
+    color: red;
+    pointer-events: none;
+}
+
+.grid-table-wrapper {
+    overflow-x: auto;
+}
+
+.grid-wrapper {
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 nav {
- display: flex;
- justify-content: space-between;
- align-items: center;
- padding: 1rem;
- background-color: var(--color-bg);
- border-bottom: 1px solid var(--color-border);
- flex-wrap: wrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--b-bg-2);
+    flex-wrap: wrap;
 }
 
 .nav-logo a {
     text-decoration: none;
-    color: var(--color-text);
+    color: var(--b-txt);
 }
 
 .nav-logo h1 {
@@ -28,22 +43,14 @@ nav {
 
 .nav-menu {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     flex-grow: 1;
-    margin-left: 2rem;
-}
-
-.nav-left, .nav-right {
-    display: flex;
+    gap: 1rem;
     list-style: none;
-    padding: 0;
     margin: 0;
 }
 
-.nav-left li, .nav-right li {
-    margin: 0 0.5rem;
-    position: relative;
+.nav-flex {
+    flex-grow: 1;
 }
 
 .nav-dropdown {
@@ -55,8 +62,8 @@ nav {
     position: absolute;
     right: 0;
     top: 100%;
-    background-color: var(--color-bg);
-    border: 1px solid var(--color-border);
+    background-color: var(--b-bg-1);
+    border: 1px solid var(--b-line);
     border-radius: 4px;
     padding: 0.5rem 0;
     min-width: 180px;
@@ -78,11 +85,11 @@ nav {
     display: block;
     padding: 0.5rem 1rem;
     text-decoration: none;
-    color: var(--color-text);
+    color: var(--b-txt);
 }
 
 .dropdown-menu a:hover {
-    background-color: var(--color-bg-secondary);
+    background-color: var(--b-bg-2);
 }
 
 /* Mobile menu toggle */
@@ -110,23 +117,22 @@ nav {
         align-items: flex-start;
     }
 
-    .nav-left, .nav-right {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .nav-left li, .nav-right li {
-        margin: 0.5rem 0;
+    .nav-dropdown {
         width: 100%;
     }
 
     .dropdown-menu {
+        display: block;
         position: relative;
         width: 100%;
         box-shadow: none;
         border: none;
-        background-color: var(--color-bg-secondary);
+        background-color: var(--b-bg-2);
         padding-left: 1rem;
+    }
+
+    .dropdown-menu a {
+        padding: 0.5rem 0;
     }
 
     .nav-toggle:checked ~ .nav-menu {
@@ -134,11 +140,21 @@ nav {
     }
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+center {
+    flex: 1;
+}
 
 footer {
     margin-top: 2rem;
     padding: 2rem 0;
-    background-color: #f8f8f8;
+    background-color: var(--b-bg-2);
     text-align: center;
 }
 
@@ -176,6 +192,4 @@ footer .social-links {
 
 footer .copyright {
     margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid #dee2e6;
 }

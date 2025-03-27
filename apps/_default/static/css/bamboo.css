@@ -44,11 +44,6 @@ body {
     -webkit-text-size-adjust: 100%
 }
 
-main {
-    max-width: 70ch;
-    padding: 0 1rem;
-}
-
 h1, h2, h3, h4, h5, h6, p, ul, ol, dl, dd, details, blockquote, pre, figure, table, address, hr, fieldset, iframe, audio, video {
     margin: 0 0 1.5rem
 }

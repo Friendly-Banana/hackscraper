@@ -23,12 +23,19 @@ db.define_table(
 )
 
 values = [e.value for e in DirectScraper] + [e.value for e in Aggregator]
-names = ["Direct " + e.name for e in DirectScraper] + ["Aggregator " + e.name for e in Aggregator]
+names = ["Direct " + e.name for e in DirectScraper] + [
+    "Aggregator " + e.name for e in Aggregator
+]
 db.define_table(
     "scraper",
     Field("url", "string", unique=True, requires=IS_URL()),
     Field("direct", "boolean", notnull=True),
-    Field("type", "integer", notnull=True, requires=[IS_IN_SET(values, names, zero=names[0])]),
+    Field(
+        "type",
+        "integer",
+        notnull=True,
+        requires=[IS_IN_SET(values, names, zero=names[0])],
+    ),
     Field("last_scraped", "datetime"),
     Field("next_run", "reference task_run"),
     Field("from_scraper", "reference scraper"),

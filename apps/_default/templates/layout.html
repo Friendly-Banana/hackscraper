@@ -1,104 +1,94 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <base href="[[=URL('static')]]/">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAAQEAAAEAIAAwAAAAFgAAACgAAAABAAAAAgAAAAEAIAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAA=="/>
+    <link rel="shortcut icon"
+          href="data:image/x-icon;base64,AAABAAEAAQEAAAEAIAAwAAAAFgAAACgAAAABAAAAAgAAAAEAIAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAA=="/>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
-    <style>
-    .py4web-validation-error{margin-top:-16px; font-size:0.8em; color:red; pointer-events:none;}
-    .grid-table-wrapper{overflow-x: auto;}
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+          integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+          crossorigin="anonymous"/>
     <title>[[=__vars__.get("title", "")]]</title>
-    [[block page_head]]<!-- individual pages can customize header here -->[[end]]
-  </head>
-  <body>
-  <header>
-      <nav>
-          <!-- Logo area -->
-          <div class="nav-logo">
-              <a href="/">
-                  <h1>Hackathons</h1>
-              </a>
-          </div>
+    [[block page_head]]<!-- individual pages can customize header here --> [[end]]
+</head>
+<body>
+<header>
+    <nav>
+        <!-- Logo area -->
+        <div class="nav-logo">
+            <a href="/">
+                <h1>Hackathons</h1>
+            </a>
+        </div>
 
-          <!-- Mobile menu toggle -->
-          <input type="checkbox" id="nav-toggle" class="nav-toggle">
-          <label for="nav-toggle" class="nav-toggle-label">
-              <span class="hamburger">☰</span>
-          </label>
+        <!-- Mobile menu toggle -->
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+        <label for="nav-toggle" class="nav-toggle-label">
+            <span class="hamburger">☰</span>
+        </label>
 
-          <!-- Navigation links -->
-          <div class="nav-menu">
-              <!-- Left menu section -->
-              <ul class="nav-left">
-                  [[block page_left_menu]]
-                  <li><a href="[[=URL('about')]]">About</a></li>
-                  [[end]]
-              </ul>
-
-              <!-- Right menu section -->
-              <ul class="nav-right">
-                  [[if globals().get('user'):]]
-                  <li class="nav-dropdown">
-                      <a class="nav-user">
-                          <i class="fas fa-user-circle"></i>
-                          [[=globals().get('user',{}).get('email')]]
-                      </a>
-                      <ul class="dropdown-menu">
-                          <li><a href="[[=URL('auth/profile')]]">Edit Profile</a></li>
-                          <li><a href="[[=URL('auth/change_password')]]">Change Password</a></li>
-                          <li><a href="[[=URL('auth/logout')]]">Logout</a></li>
-                      </ul>
-                  </li>
-                  [[else:]]
-                  <li class="nav-dropdown">
-                      <a href="[[=URL('auth/login')]]">Log in</a>
-                  </li>
-                  [[pass]]
-              </ul>
-          </div>
-      </nav>
-  </header>
-    <!-- beginning of HTML inserted by extending template -->
-    <center>
-      <div>
+        <!-- Navigation links -->
+        <ul class="nav-menu">
+            [[block page_left_menu]][[end]]
+            <li class="nav-flex"></li>
+            [[if globals().get('user'):]]
+            <li class="nav-dropdown">
+                <a class="nav-user">
+                    <i class="fas fa-user-circle"></i>
+                    [[=globals().get('user',{}).get('email')]]
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="[[=URL('auth/profile')]]">Edit Profile</a></li>
+                    <li><a href="[[=URL('auth/change_password')]]">Change Password</a></li>
+                    <li><a href="[[=URL('auth/logout')]]">Logout</a></li>
+                </ul>
+            </li>
+            [[else:]]
+            <li><a href="[[=URL('auth/login')]]">Log in</a></li>
+            <li><a href="[[=URL('auth/register')]]">Sign up</a></li>
+            [[pass]]
+        </ul>
+    </nav>
+</header>
+<!-- beginning of HTML inserted by extending template -->
+<center>
+    <div>
         <!-- Flash alert messages, first optional one in data-alert -->
         <flash-alerts class="padded" data-alert="[[=globals().get('flash','')]]"></flash-alerts>
-      </div>
-      <main>
+    </div>
+    <main>
         <!-- content injected by extending page -->
         [[include]]
-      </main>
-    </center>
-    <!-- end of HTML inserted by extending template -->
-    <footer>
-        <div class="row">
-            <div class="col">
-                <h3>Hackathons</h3>
-                <p>Find and explore hackathons around the world.</p>
-            </div>
-            <div class="col">
-                <h3>Links</h3>
-                <ul>
-                    <li><a href="[[=URL('')]]">Home</a></li>
-                    <li><a href="[[=URL('about')]]">About</a></li>
-                </ul>
-            </div>
-            <div class="col">
-                <h3>Social</h3>
-                <div class="social-links">
-                    <a href="https://github.com/Friendly-Banana/hackscraper" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                </div>
+    </main>
+</center>
+<!-- end of HTML inserted by extending template -->
+<footer>
+    <div class="row">
+        <div class="col">
+            <h3>Hackathons</h3>
+            <p>Find and explore hackathons around the world.</p>
+        </div>
+        <div class="col">
+            <h3>Links</h3>
+            <ul>
+                <li><a href="[[=URL('')]]">Home</a></li>
+                <li><a href="[[=URL('about')]]">About</a></li>
+            </ul>
+        </div>
+        <div class="col">
+            <h3>Social</h3>
+            <div class="social-links">
+                <a href="https://github.com/Friendly-Banana/hackscraper" aria-label="GitHub"><i class="fab fa-github"></i></a>
             </div>
         </div>
-        <div class="copyright">
-            &copy; 2025 Hackathons
-        </div>
-    </footer>
-  </body>
-  <!-- You've gotta have utils.js -->
-  <script src="js/utils.js"></script>
-  [[block page_scripts]]<!-- individual pages can add scripts here -->[[end]]
+    </div>
+    <div class="copyright">
+        &copy; 2025 Hackathons
+    </div>
+</footer>
+</body>
+<!-- You've gotta have utils.js -->
+<script src="js/utils.js"></script>
+[[block page_scripts]]<!-- individual pages can add scripts here --> [[end]]
 </html>

@@ -43,19 +43,19 @@ def index():
 
 class GridActionButton:
     def __init__(
-            self,
-            url,
-            text,
-            icon,
-            additional_classes="",
-            additional_styles="",
-            override_classes="",
-            override_styles="",
-            message="",
-            append_id=False,
-            name=None,
-            ignore_attribute_plugin=False,
-            **attrs,
+        self,
+        url,
+        text,
+        icon,
+        additional_classes="",
+        additional_styles="",
+        override_classes="",
+        override_styles="",
+        message="",
+        append_id=False,
+        name=None,
+        ignore_attribute_plugin=False,
+        **attrs,
     ):
         self.url = url
         self.text = text
@@ -97,9 +97,9 @@ def hackathon(path=None):
         [
             "All",
             lambda value: db.hackathon.name.contains(value)
-                          | db.hackathon.description.contains(value)
-                          | db.hackathon.date.contains(value)
-                          | db.hackathon.location.contains(value),
+            | db.hackathon.description.contains(value)
+            | db.hackathon.date.contains(value)
+            | db.hackathon.location.contains(value),
         ],
         ["By Name", lambda value: db.hackathon.name.contains(value)],
         ["By Description", lambda value: db.hackathon.description.contains(value)],
@@ -173,8 +173,8 @@ def users(path=None):
         [
             "By Name",
             lambda value: db.auth_user.username.contains(value)
-                          | db.auth_user.first_name.contains(value)
-                          | db.auth_user.last_name.contains(value),
+            | db.auth_user.first_name.contains(value)
+            | db.auth_user.last_name.contains(value),
         ],
         ["By Email", lambda value: db.auth_user.email.contains(value)],
         ["By Group", lambda value: db.auth_user_tag_groups.tagpath.contains(value)],
@@ -208,7 +208,7 @@ def tasks(path=None):
         [
             "By Name or Description",
             lambda value: db.task_run.name.contains(value)
-                          | db.task_run.description.contains(value),
+            | db.task_run.description.contains(value),
         ],
     ]
 
@@ -296,4 +296,9 @@ def suggestion_detail(suggestion_id=None):
         if suggestion.from_scraper.direct
         else (Aggregator(suggestion.from_scraper.type))
     )
-    return dict(title=f"Review Suggestion {suggestion.id}", suggestion=suggestion, hackathon=hackathon, scraper_type=scraper_type)
+    return dict(
+        title=f"Review Suggestion {suggestion.id}",
+        suggestion=suggestion,
+        hackathon=hackathon,
+        scraper_type=scraper_type,
+    )
