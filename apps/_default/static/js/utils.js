@@ -1,9 +1,9 @@
-"user strict";
+"use strict";
 
 // Allows "bla {a} bla {b}".format({'a': 'hello', 'b': 'world'})
 if (!String.prototype.format) {
     String.prototype.format = function (args) {
-        return this.replace(/\{([^}]+)\}/g, function (match, k) { return args[k]; });
+        return this.replace(/\{([^}]+)}/g, function (match, k) { return args[k]; });
     };
 }
 
@@ -15,7 +15,7 @@ Q.clone = function (data) { return JSON.parse(JSON.stringify(data)); };
 
 Q.eval = function(text) { return eval('('+text+')'); };
 
-// Given a url retuns an object with parsed query string
+// Given a url returns an object with parsed query string
 Q.get_query = function (source) {
     source = source || window.location.search.substring(1);
     var vars = {}, items = source.split('&');
@@ -214,7 +214,7 @@ Q.tags_input = function(elem, options) {
     fill(elem, repl);
 };
 
-// Password strenght calculator
+// Password strength calculator
 Q.score_password = function(text) {
     var score = -10, counters = {};
     text.split('').map(function(c){counters[c]=(counters[c]||0)+1; score += 5/counters[c];});
@@ -292,7 +292,7 @@ Q.handle_flash = function() {
     var make_handler = function(elem) {
         return function (event) { 
             var node = document.createElement("div");
-            node.innerHTML = '<div role="alert"><span class="close"></span>{0}</div>'.format([event.detail.message]);
+            node.innerHTML = '<div role="alert"><button class="close"><i class="fa fa-times-circle" aria-hidden="true"></i></button>{0}</div>'.format([event.detail.message]);
             node = Q('[role="alert"]', node)[0];
             node.classList.add(event.detail.class||'info');
             elem.appendChild(node);
@@ -309,5 +309,5 @@ Q.handle_flash = function() {
 Q.handle_components();
 Q.handle_flash();
 Q('input[type=text].type-list-string').forEach(function(elem){Q.tags_input(elem);});
-Q('input[type=text].type-list-integer').forEach(function(elem){Q.tags_input(elem, {regex:/[-+]?[\d]+/});});
+Q('input[type=text].type-list-integer').forEach(function(elem){Q.tags_input(elem, {regex:/[-+]?\d+/});});
 Q('input[name=password],input[name=new_password]').forEach(Q.score_input);

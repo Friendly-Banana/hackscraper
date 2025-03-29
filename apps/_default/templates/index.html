@@ -1,5 +1,11 @@
 [[extend 'layout.html']]
 
+[[block page_left_menu]]
+[[ if is_admin: ]]
+<li><a href="[[=URL('admin')]]">Admin</a></li>
+[[ pass ]]
+[[end]]
+
 [[ if hackathons: ]]
 <div class="hackathon-grid padded">
     [[ for hackathon in hackathons: ]]
@@ -17,7 +23,7 @@
         <div class="card-description">
             [[= hackathon.description or "" ]]
         </div>
-        <a href="[[= hackathon.url ]]" class="card-link" target="_blank">Visit Website</a>
+        <a href="[[= hackathon.url ]]" role="button" class="primary" target="_blank">Visit Website</a>
     </div>
     [[ pass ]]
 </div>
@@ -72,19 +78,5 @@
     .card-description {
         flex-grow: 1;
         margin-bottom: 15px;
-    }
-
-    .card-link {
-        display: inline-block;
-        padding: 8px 16px;
-        background-color: #007bff;
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-        text-align: center;
-    }
-
-    .card-link:hover {
-        background-color: #0056b3;
     }
 </style>

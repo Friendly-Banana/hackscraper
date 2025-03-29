@@ -8,20 +8,41 @@ from py4web.server_adapters.logging_utils import make_logger
 from py4web.utils.auth import Auth
 from py4web.utils.downloader import downloader
 from py4web.utils.factories import ActionFactory
+from py4web.utils.form import FormStyleFactory
 from py4web.utils.mailer import Mailer
 from pydal.tools.scheduler import Scheduler
 from pydal.tools.tags import Tags
 
 from . import settings
 
-# #######################################################
+PrimaryFormStyle = FormStyleFactory()
+PrimaryFormStyle.classes.update(
+    {
+        "outer": "",
+        "inner": "",
+        "label": "",
+        "info": "",
+        "error": "py4web-validation-error",
+        "submit": "primary",
+        "input": "",
+        "input[type=text]": "",
+        "input[type=date]": "",
+        "input[type=time]": "",
+        "input[type=datetime-local]": "",
+        "input[type=radio]": "",
+        "input[type=checkbox]": "",
+        "input[type=submit]": "primary",
+        "input[type=password]": "",
+        "input[type=file]": "",
+        "select": "",
+        "textarea": "",
+    }
+)
+
 # implement custom loggers form settings.LOGGERS
-# #######################################################
 logger = make_logger("py4web:" + settings.APP_NAME, settings.LOGGERS)
 
-# #######################################################
 # connect to db
-# #######################################################
 db = DAL(
     settings.DB_URI,
     folder=settings.DB_FOLDER,
@@ -30,15 +51,11 @@ db = DAL(
     fake_migrate=settings.DB_FAKE_MIGRATE,
 )
 
-# #######################################################
 # define global objects that may or may not be used by the actions
-# #######################################################
 cache = Cache(size=1000)
 T = Translator(settings.T_FOLDER)
 
-# #######################################################
 # pick the session type that suits you best
-# #######################################################
 if settings.SESSION_TYPE == "cookies":
     session = Session(secret=settings.SESSION_SECRET_KEY)
 
@@ -66,11 +83,10 @@ elif settings.SESSION_TYPE == "database":
 
     session = Session(secret=settings.SESSION_SECRET_KEY, storage=DBStore(db))
 
-# #######################################################
 # Instantiate the object and actions that handle auth
-# #######################################################
 auth = Auth(session, db, define_tables=False)
 auth.use_username = True
+auth.param.formstyle = PrimaryFormStyle
 auth.param.registration_requires_confirmation = settings.VERIFY_EMAIL
 auth.param.registration_requires_approval = settings.REQUIRES_APPROVAL
 auth.param.login_after_registration = settings.LOGIN_AFTER_REGISTRATION
@@ -84,9 +100,7 @@ auth.fix_actions()
 
 flash = auth.flash
 
-# #######################################################
 # Configure email sender for auth
-# #######################################################
 if settings.SMTP_SERVER:
     auth.sender = Mailer(
         server=settings.SMTP_SERVER,
@@ -96,15 +110,11 @@ if settings.SMTP_SERVER:
         ssl=settings.SMTP_SSL,
     )
 
-# #######################################################
 # Create a table to tag users as group members
-# #######################################################
 if auth.db:
     groups = Tags(db.auth_user, "groups")
 
-# #######################################################
 # Enable optional auth plugin
-# #######################################################
 if settings.USE_PAM:
     from py4web.utils.auth_plugins.pam_plugin import PamPlugin
 
@@ -172,9 +182,7 @@ if settings.OAUTH2OKTA_CLIENT_ID:
         )
     )
 
-# #######################################################
 # Enable optional API token plugins
-# #######################################################
 
 # curl -H "Authorization: Bearer {token}"
 # create tokens in db.auth_simple_token
@@ -188,10 +196,8 @@ if settings.OAUTH2OKTA_CLIENT_ID:
 # jwt_token_plugin = JwtTokenPlugin(auth)
 # auth.token_plugins.append(jwt_token_plugin)
 
-# #######################################################
 # Define a convenience action to allow users to download
 # files uploaded and reference by Field(type='upload')
-# #######################################################
 if settings.UPLOAD_FOLDER:
 
     @action("download/<filename>")
@@ -205,9 +211,7 @@ if settings.UPLOAD_FOLDER:
     # field.upload_path = settings.UPLOAD_FOLDER
     # field.download_url = lambda filename: URL('download/%s' % filename)
 
-# #######################################################
 # Define and optionally start the scheduler
-# #######################################################
 if settings.USE_SCHEDULER:
     child = logger.getChild(".scheduler")
     child.setLevel("WARNING")
@@ -218,17 +222,13 @@ if settings.USE_SCHEDULER:
 else:
     scheduler = None
 
-# #######################################################
 # Enable authentication
-# #######################################################
 auth.enable(uses=(session, T, db), env=dict(T=T))
 
-# #######################################################
 # Define convenience decorators
 # They can be used instead of @action and @action.uses
 # They should NEVER BE MIXED with @action and @action.uses
 # If you need to provide extra fixtures for a specific controller
 # add them like this: @authenticated(uses=[extra_fixture])
-# #######################################################
 unauthenticated = ActionFactory(db, session, T, flash, auth)
 authenticated = ActionFactory(db, session, T, flash, auth.user)

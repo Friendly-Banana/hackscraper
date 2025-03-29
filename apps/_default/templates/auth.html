@@ -1,15 +1,5 @@
 [[extend "layout.html"]]
 <style>
-    .auth-container {
-        max-width: 80%;
-        min-width: 400px;
-        margin-left: auto;
-        margin-right: auto;
-        border: 1px solid #e1e1e1;
-        border-radius: 10px;
-        padding: 20px;
-    }
-
     .auth-container div:has(> a) {
         display: flex;
         gap: 2rem;
@@ -17,6 +7,6 @@
         align-items: center;
     }
 </style>
-<div class="auth-container">
+<div class="padded auth-container">
     [[=form]]
 </div>

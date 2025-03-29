@@ -31,14 +31,18 @@ from yatl.helpers import A
 
 from aggregator import Aggregator
 from direct_scraper import DirectScraper
-from .common import T, auth, db, groups, flash, session, scheduler
+from .common import T, auth, db, groups, flash, session, scheduler, PrimaryFormStyle
 
 
 @action("index")
 @action.uses("index.html", auth, T, db)
 def index():
     hackathons = db(db.hackathon).select(limitby=(0, 10))
-    return dict(title="Hackathons", hackathons=hackathons)
+    return dict(
+        title="Hackathons",
+        hackathons=hackathons,
+        is_admin="admin" in groups.get(auth.user_id),
+    )
 
 
 class GridActionButton:
@@ -111,6 +115,7 @@ def hackathon(path=None):
         db.hackathon,
         search_queries=search_queries,
         orderby=orderby,
+        formstyle=PrimaryFormStyle,
         T=T,
     )
 
@@ -123,7 +128,7 @@ def hackathon(path=None):
 @admin_only
 def schedule_scraper(scraper):
     if request.headers["Sec-Fetch-Site"] not in ["same-origin", "none"]:
-        flash.set(T("Evil cross-origin request"), "warning")
+        flash.set(T("cross-origin request"), "warning")
         return redirect(URL("admin/scrapers/select"))
 
     scheduler.enqueue_run(
@@ -158,6 +163,7 @@ def scrapers(path=None):
         db.scraper,
         search_queries=search_queries,
         pre_action_buttons=pre_action_buttons,
+        formstyle=PrimaryFormStyle,
         T=T,
     )
 
@@ -185,6 +191,7 @@ def users(path=None):
         db.auth_user,
         search_queries=search_queries,
         orderby=db.auth_user.username,
+        formstyle=PrimaryFormStyle,
         T=T,
     )
 
@@ -216,6 +223,7 @@ def tasks(path=None):
         path,
         db.task_run,
         search_queries=search_queries,
+        formstyle=PrimaryFormStyle,
         T=T,
     )
 
@@ -246,6 +254,7 @@ def suggestion(path=None):
         pre_action_buttons=pre_action_buttons,
         details=False,
         editable=False,
+        formstyle=PrimaryFormStyle,
         T=T,
     )
 

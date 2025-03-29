@@ -1,5 +1,13 @@
 @import url("bamboo.css");
 
+:root {
+    --primary: #007bff;
+}
+
+.primary {
+    color: #eceff4;
+    background-color: var(--primary);
+}
 
 .padded {
     padding: 1.5em;
@@ -12,6 +20,51 @@
     pointer-events: none;
 }
 
+/* Flash messages */
+flash-alerts .info {
+    background-color: var(--b-bg-2);
+}
+
+flash-alerts .success {
+    background-color: #2ecc40;
+}
+
+flash-alerts .warning {
+    color: black;
+    background-color: #ffdc00;
+}
+
+flash-alerts .error {
+    color: white;
+    background-color: #cc1f00;
+}
+
+[role="alert"] {
+    max-width: 80ch;
+    margin-bottom: 0.5em;
+    padding: 1.5em;
+    position: relative;
+    border-radius: 4px;
+}
+
+[role="alert"] > .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+}
+
+/* Form and Grid */
+form:not(#grid-search form) {
+    max-width: 80ch;
+    min-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid var(--b-line);
+    border-radius: 10px;
+    padding: 20px;
+}
+
 .grid-table-wrapper {
     overflow-x: auto;
 }
@@ -22,6 +75,7 @@
     margin-right: auto;
 }
 
+/* Navigation */
 nav {
     display: flex;
     justify-content: space-between;
@@ -63,9 +117,9 @@ nav {
     right: 0;
     top: 100%;
     background-color: var(--b-bg-1);
-    border: 1px solid var(--b-line);
-    border-radius: 4px;
-    padding: 0.5rem 0;
+    border: 2px solid var(--b-line);
+    border-radius: 10px;
+    padding: 0;
     min-width: 180px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 100;
@@ -140,6 +194,7 @@ nav {
     }
 }
 
+/* Footer */
 html, body {
     height: 100%;
     margin: 0;
