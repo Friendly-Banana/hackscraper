@@ -19,7 +19,7 @@ db.define_table(
     Field("description", "text"),
     Field("date", "string"),
     Field("location", "string"),
-    format="%(url)s",
+    format="%(name)s",
 )
 
 values = [e.value for e in DirectScraper] + [e.value for e in Aggregator]
@@ -36,8 +36,6 @@ db.define_table(
         notnull=True,
         requires=[IS_IN_SET(values, names, zero=names[0])],
     ),
-    Field("last_scraped", "datetime"),
-    Field("next_run", "reference task_run"),
     Field("from_scraper", "reference scraper"),
     format="%(url)s",
 )
@@ -52,6 +50,10 @@ db.define_table(
     Field("created_at", "datetime", default=datetime.now),
     Field("hackathon_id", "reference hackathon", notnull=True),
     Field("from_scraper", "reference scraper", notnull=True),
+)
+
+db.executesql(
+    "CREATE UNIQUE INDEX IF NOT EXISTS unique_suggestion ON suggestion (image, name, description, date, location, hackathon_id);"
 )
 
 db.commit()

@@ -7,8 +7,12 @@ This file is provided as an example:
 """
 
 import os
+from datetime import timedelta
 
 from py4web.core import required_folder
+
+DEFAULT_SCRAPE_FREQUENCY = timedelta(days=30)
+REQUESTS_DRY_RUN = True
 
 # mode (default or development)
 MODE = os.environ.get("PY4WEB_MODE")

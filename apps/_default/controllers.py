@@ -99,14 +99,14 @@ def admin_index():
 def hackathon(path=None):
     search_queries = [
         [
-            "All",
+            T("All"),
             lambda value: db.hackathon.name.contains(value)
             | db.hackathon.description.contains(value)
             | db.hackathon.date.contains(value)
             | db.hackathon.location.contains(value),
         ],
-        ["By Name", lambda value: db.hackathon.name.contains(value)],
-        ["By Description", lambda value: db.hackathon.description.contains(value)],
+        [T("By Name"), lambda value: db.hackathon.name.contains(value)],
+        [T("By Description"), lambda value: db.hackathon.description.contains(value)],
     ]
 
     orderby = [db.hackathon.name]
@@ -121,20 +121,23 @@ def hackathon(path=None):
 
     grid.columns[1].represent = lambda row: A(row.url, _href=row.url, _target="_blank")
 
-    return dict(title="Admin Hackathons", grid=grid)
+    return dict(title="Manage Hackathons", grid=grid)
 
 
-@action("admin/schedule_scraper/<scraper:int>", method=["POST", "GET"])
+@action("admin/schedule_scraper/<scraper_id:int>", method=["POST", "GET"])
 @admin_only
-def schedule_scraper(scraper):
+def schedule_scraper(scraper_id):
     if request.headers["Sec-Fetch-Site"] not in ["same-origin", "none"]:
-        flash.set(T("cross-origin request"), "warning")
+        flash.set(T("Cross-origin request"), "warning")
         return redirect(URL("admin/scrapers/select"))
 
+    scraper = db.scraper[scraper_id]
+    if not scraper:
+        raise HTTP(400, "Scraper not found")
     scheduler.enqueue_run(
         "run_scraper",
         "manually",
-        inputs={"scraper": scraper},
+        inputs={"scraper": scraper_id},
         timeout=3 * 60,
         priority=-1,
     )
@@ -146,13 +149,13 @@ def schedule_scraper(scraper):
 @admin_only
 def scrapers(path=None):
     search_queries = [
-        ["By URL", lambda value: db.scraper.url.contains(value)],
+        [T("By URL"), lambda value: db.scraper.url.contains(value)],
     ]
 
     pre_action_buttons = [
         lambda row: GridActionButton(
             f"/admin/schedule_scraper/{row.id}",
-            "Schedule",
+            T("Schedule"),
             "fas fa-play",
             name="grid-edit-button",
         )
@@ -169,7 +172,7 @@ def scrapers(path=None):
 
     grid.columns[3].represent = lambda row: A(row.url, _href=row.url, _target="_blank")
 
-    return dict(title="Admin Scrapers", grid=grid)
+    return dict(title=T("Manage Scrapers"), grid=grid)
 
 
 @action("admin/users/<path:path>", method=["POST", "GET"])
@@ -177,13 +180,13 @@ def scrapers(path=None):
 def users(path=None):
     search_queries = [
         [
-            "By Name",
+            T("By Name"),
             lambda value: db.auth_user.username.contains(value)
             | db.auth_user.first_name.contains(value)
             | db.auth_user.last_name.contains(value),
         ],
-        ["By Email", lambda value: db.auth_user.email.contains(value)],
-        ["By Group", lambda value: db.auth_user_tag_groups.tagpath.contains(value)],
+        [T("By Email"), lambda value: db.auth_user.email.contains(value)],
+        [T("By Group"), lambda value: db.auth_user_tag_groups.tagpath.contains(value)],
     ]
 
     grid = Grid(
@@ -205,7 +208,7 @@ def users(path=None):
         ),
     )
 
-    return dict(title="Manage Users", grid=grid)
+    return dict(title=T("Manage Users"), grid=grid)
 
 
 @action("admin/tasks/<path:path>", method=["POST", "GET"])
@@ -213,9 +216,14 @@ def users(path=None):
 def tasks(path=None):
     search_queries = [
         [
-            "By Name or Description",
+            T("By Name or Description"),
             lambda value: db.task_run.name.contains(value)
             | db.task_run.description.contains(value),
+        ],
+        [
+            T("By Scraper Input"),
+            lambda value: (db.task_run.name == "run_scraper")
+            & db.task_run.inputs.contains(value),
         ],
     ]
 
@@ -227,20 +235,20 @@ def tasks(path=None):
         T=T,
     )
 
-    return dict(title="Manage Tasks", grid=grid)
+    return dict(title=T("Manage Tasks"), grid=grid)
 
 
 @action("admin/suggestions/<path:path>", method=["POST", "GET"])
 @admin_only
 def suggestion(path=None):
     search_queries = [
-        ["By Name", lambda value: db.suggestion.name.contains(value)],
+        [T("By Name"), lambda value: db.suggestion.name.contains(value)],
     ]
 
     pre_action_buttons = [
         lambda row: GridActionButton(
             f"/admin/suggestion/{row.id}",
-            "Accept",
+            T("Accept"),
             "fas fa-edit",
             name="grid-edit-button",
         )
@@ -258,7 +266,7 @@ def suggestion(path=None):
         T=T,
     )
 
-    return dict(title="Manage Suggestions", grid=grid)
+    return dict(title=T("Manage Suggestions"), grid=grid)
 
 
 @action("admin/suggestion/<suggestion_id:int>", method=["GET", "POST"])
@@ -297,7 +305,7 @@ def suggestion_detail(suggestion_id=None):
             hackathon.update_record(location=suggestion.location)
         suggestion.delete_record()
         db.commit()
-        flash.set(T("Fields applied successfully"))
+        flash.set(T("Fields applied"))
         return redirect(URL("admin/suggestions/select"))
 
     scraper_type = suggestion.from_scraper and (
@@ -306,7 +314,7 @@ def suggestion_detail(suggestion_id=None):
         else (Aggregator(suggestion.from_scraper.type))
     )
     return dict(
-        title=f"Review Suggestion {suggestion.id}",
+        title=T("Review Suggestion {id}").format(id=suggestion.id),
         suggestion=suggestion,
         hackathon=hackathon,
         scraper_type=scraper_type,

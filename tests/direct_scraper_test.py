@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 
 from parameterized import parameterized
 
-import config
+import direct_scraper
 
 from direct_scraper import (
     get_hackathon,
@@ -14,14 +14,14 @@ from direct_scraper import (
     huawei,
     n3xtcoder,
     taikai_network,
+    Hackathon,
 )
-from models import Hackathon
 
 
 class TestScrapers(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        config.REQUESTS_DRY_RUN = True
+        direct_scraper.REQUESTS_DRY_RUN = True
 
     @parameterized.expand(
         [

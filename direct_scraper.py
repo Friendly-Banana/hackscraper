@@ -1,14 +1,25 @@
 import json
 import logging
+from dataclasses import dataclass
 from enum import Enum
 from urllib.parse import urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
+from transformers import pipeline
 
-from config import REQUESTS_DRY_RUN
-from llm_support import fill_in
-from models import Hackathon
+
+@dataclass
+class Hackathon:
+    url: str
+    image: str
+    name: str
+    description: str
+    date: str
+    location: str = ""
+
+
+REQUESTS_DRY_RUN = True
 
 
 def get_html(url: str):
@@ -51,6 +62,21 @@ def split_title(hack: Hackathon, title: str):
         hack.description = " - ".join(parts[1:])
 
 
+name = "What is the name of the hackathon?"
+description = "What is the hackathon about?"
+date = "When is the hackathon?"
+location = "Where is the hackathon?"
+
+qa_model = None
+
+
+def ask(question: str, context: str) -> str:
+    global qa_model
+    if qa_model is None:
+        qa_model = pipeline("question-answering", "timpal0l/mdeberta-v3-base-squad2")
+    return qa_model(question=question, context=context)["answer"].strip()
+
+
 def get_hackathon(url: str) -> list[Hackathon]:
     soup = get_html(url)
     hack = Hackathon(url, "", "", "", "", "")
@@ -69,8 +95,15 @@ def get_hackathon(url: str) -> list[Hackathon]:
 
     text = soup.find("body").get_text("\n", strip=True)
     # URL may have been set from meta tag
-    llm_hack = Hackathon(hack.url, "", "", "", "", "")
-    llm_suggestion = fill_in(llm_hack, text)
+    llm_hack = Hackathon(
+        hack.url,
+        "",
+        ask(name, text),
+        ask(description, text),
+        ask(date, text),
+        ask(location, text),
+    )
+    llm_suggestion = llm_hack
     return [hack, llm_suggestion]
 
 
