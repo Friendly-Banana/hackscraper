@@ -24,7 +24,7 @@ APP_NAME = "hackathon"
 # DB_FOLDER:    Sets the place where migration files will be created
 #               and is the store location for SQLite databases
 DB_FOLDER = required_folder(APP_FOLDER, "databases")
-DB_URI = "sqlite://storage.db"
+DB_URI = os.environ.get("DATABASE_URL", "sqlite://storage.db")
 DB_POOL_SIZE = 1
 DB_MIGRATE = True
 DB_FAKE_MIGRATE = False
