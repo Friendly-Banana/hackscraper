@@ -35,14 +35,20 @@ from .common import T, auth, db, groups, flash, session, scheduler, PrimaryFormS
 
 
 @action("index")
-@action.uses("index.html", auth, T, db)
+@action.uses("index.html", auth, db)
 def index():
     hackathons = db(db.hackathon).select(limitby=(0, 10))
     return dict(
-        title="Hackathons",
+        title="Find your next Hackathon",
         hackathons=hackathons,
         is_admin="admin" in groups.get(auth.user_id),
     )
+
+
+@action("about")
+@action.uses("about.html", auth)
+def about():
+    return dict(title="About Hackscraper")
 
 
 class GridActionButton:

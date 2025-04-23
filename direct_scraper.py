@@ -19,38 +19,42 @@ class Hackathon:
     location: str = ""
 
 
-REQUESTS_DRY_RUN = True
+REQUESTS_DRY_RUN = False
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko; Hackscraper/0.1; hack.gabriels.cloud) Chrome/134.0.0.0 Safari/537.3"
 
 
 def get_html(url: str):
+    headers = {"User-Agent": USER_AGENT}
     if REQUESTS_DRY_RUN:
         host = urlparse(url).netloc
         with open(f"tests/data/{host}.html", encoding="utf-8") as file:
             return BeautifulSoup(file.read(), "html.parser")
 
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
     response.raise_for_status()
     return BeautifulSoup(response.text, "html.parser")
 
 
 def get_json(url: str):
+    headers = {"User-Agent": USER_AGENT}
     if REQUESTS_DRY_RUN:
         host = urlparse(url).netloc
         with open(f"tests/data/{host}.json", encoding="utf-8") as file:
             return json.load(file)
 
-    response = requests.get(url)
+    response = requests.get(url, headers=headers)
     response.raise_for_status()
     return response.json()
 
 
 def post_json(url: str, body):
+    headers = {"User-Agent": USER_AGENT}
     if REQUESTS_DRY_RUN:
         host = urlparse(url).netloc
         with open(f"tests/data/{host}.json", encoding="utf-8") as file:
             return json.load(file)
 
-    response = requests.post(url, json=body)
+    response = requests.post(url, json=body, headers=headers)
     response.raise_for_status()
     return response.json()
 
@@ -172,7 +176,7 @@ def n3xtcoder(_url: str) -> list[Hackathon]:
         time = card["timeFrame"]
         hack = Hackathon(
             url=urljoin("https://n3xtcoder.org/", card["slug"]),
-            image="assets/n3xtcoder.png",
+            image="/static/n3xtcoder.png",
             name="",
             description="",
             date=f"{time['starttime']} - {time['endtime']}",

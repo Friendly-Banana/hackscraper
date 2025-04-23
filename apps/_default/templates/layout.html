@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
           integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
           crossorigin="anonymous"/>
-    <title>[[=__vars__.get("title", "")]]</title>
+    <title>[[=title := __vars__.get("title", "") + " | Hackscraper" if title else "Hackscraper"]]</title>
     [[block page_head]]<!-- individual pages can customize header here --> [[end]]
 </head>
 <body>
@@ -18,7 +18,7 @@
         <!-- Logo area -->
         <div class="nav-logo">
             <a href="/">
-                <h1>Hackathons</h1>
+                <h1>Hackscraper</h1>
             </a>
         </div>
 
@@ -66,8 +66,8 @@
 <footer>
     <div class="row">
         <div class="col">
-            <h3>Hackathons</h3>
-            <p>Find and explore hackathons around the world.</p>
+            <h3>Hackscraper</h3>
+            <p>Find hackathons around the world.</p>
         </div>
         <div class="col">
             <h3>Links</h3>
@@ -84,7 +84,7 @@
         </div>
     </div>
     <div class="copyright">
-        &copy; 2025 Hackathons
+        &copy; 2025 Gabriel
     </div>
 </footer>
 </body>

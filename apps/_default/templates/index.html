@@ -10,9 +10,7 @@
 <div class="hackathon-grid padded">
     [[ for hackathon in hackathons: ]]
     <div class="hackathon-card">
-        [[ if hackathon.image: ]]
         <img src="[[= hackathon.image ]]" alt="[[= hackathon.name ]]" class="hackathon-image">
-        [[ pass ]]
         <div class="card-header">
             <h3 class="card-title">[[= hackathon.name ]]</h3>
             <div class="card-metadata">
@@ -59,6 +57,7 @@
         object-fit: cover;
         border-radius: 4px;
         margin-bottom: 15px;
+        background-color: var(--b-bg-1);
     }
 
     .card-header {
