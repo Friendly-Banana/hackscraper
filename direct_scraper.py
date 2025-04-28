@@ -66,11 +66,6 @@ def split_title(hack: Hackathon, title: str):
         hack.description = " - ".join(parts[1:])
 
 
-name = "What is the name of the hackathon?"
-description = "What is the hackathon about?"
-date = "When is the hackathon?"
-location = "Where is the hackathon?"
-
 qa_model = None
 
 
@@ -102,10 +97,10 @@ def get_hackathon(url: str) -> list[Hackathon]:
     llm_hack = Hackathon(
         hack.url,
         "",
-        ask(name, text),
-        ask(description, text),
-        ask(date, text),
-        ask(location, text),
+        ask("What is the name of the hackathon?", text),
+        ask("What is the hackathon about?", text),
+        ask("When is the hackathon?", text),
+        ask("Where is the hackathon?", text),
     )
     llm_suggestion = llm_hack
     return [hack, llm_suggestion]

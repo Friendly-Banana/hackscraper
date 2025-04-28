@@ -11,8 +11,10 @@ from datetime import timedelta
 
 from py4web.core import required_folder
 
+import direct_scraper
+
 DEFAULT_SCRAPE_FREQUENCY = timedelta(days=30)
-REQUESTS_DRY_RUN = True
+REQUESTS_DRY_RUN = direct_scraper.REQUESTS_DRY_RUN
 
 # mode (default or development)
 MODE = os.environ.get("PY4WEB_MODE")
@@ -58,10 +60,10 @@ ALLOWED_ACTIONS = ["all"]
 
 # email settings
 SMTP_SSL = False
-SMTP_SERVER = None
-SMTP_SENDER = "you@example.com"
-SMTP_LOGIN = "username:password"
-SMTP_TLS = False
+SMTP_SERVER = os.getenv("SMTP_SERVER", "localhost")
+SMTP_SENDER = os.getenv("SMTP_SENDER", "noreply@localhost")
+SMTP_LOGIN = os.getenv("SMTP_LOGIN", None)
+SMTP_TLS = True
 
 # session settings
 SESSION_TYPE = "cookies"
