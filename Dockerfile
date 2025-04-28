@@ -2,6 +2,9 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
 WORKDIR /app
 
+# expose default DB
+VOLUME /app/apps/_default/databases
+
 # install dependencies
 COPY pyproject.toml uv.lock /app/
 RUN uv sync --locked --no-dev --extra cpu
