@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 from dataclasses import dataclass
 from enum import Enum
 from urllib.parse import urljoin, urlparse
@@ -19,7 +20,7 @@ class Hackathon:
     location: str = ""
 
 
-REQUESTS_DRY_RUN = False
+REQUESTS_DRY_RUN = bool(os.getenv("REQUESTS_DRY_RUN"))
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko; Hackscraper/0.1; hack.gabriels.cloud) Chrome/134.0.0.0 Safari/537.3"
 
 

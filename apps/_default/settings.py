@@ -21,7 +21,7 @@ MODE = os.environ.get("PY4WEB_MODE")
 
 # db settings
 APP_FOLDER = os.path.dirname(__file__)
-APP_NAME = "hackathon"
+APP_NAME = "hackscraper"
 
 # DB_FOLDER:    Sets the place where migration files will be created
 #               and is the store location for SQLite databases
