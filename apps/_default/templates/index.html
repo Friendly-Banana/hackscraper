@@ -4,6 +4,16 @@
 [[ if is_admin: ]]
 <li><a href="[[=URL('admin')]]">Admin</a></li>
 [[ pass ]]
+<form method="get" action="/" class="search-form">
+    <input
+            type="search"
+            name="search"
+            value="[[=search_term]]"
+            placeholder="Search hackathons..."
+            class="search-input"
+    />
+    <button type="submit" class="search-button">Search</button>
+</form>
 [[end]]
 
 [[ if hackathons: ]]
@@ -30,6 +40,20 @@
 [[ pass ]]
 
 <style>
+    form:not(#grid-search form) {
+        padding: 0;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 10px;
+    }
+
+    .search-input {
+        border: 1px solid var(--b-txt);
+        border-radius: 8px;
+    }
+
     .hackathon-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

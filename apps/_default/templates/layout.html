@@ -32,10 +32,10 @@
         <!-- Navigation links -->
         <ul class="nav-menu">
             [[block page_left_menu]][[end]]
-            <li class="nav-flex"></li>
+            <li style="margin: auto"></li>
             [[if globals().get('user'):]]
             <li class="nav-dropdown">
-                <a class="nav-user">
+                <a class="nav-user" tabindex="0">
                     <i class="fas fa-user-circle"></i>
                     [[=globals().get('user',{}).get('email')]]
                 </a>

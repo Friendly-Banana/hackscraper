@@ -37,11 +37,14 @@ from .common import T, auth, db, groups, flash, session, scheduler, PrimaryFormS
 @action("index")
 @action.uses("index.html", auth, db)
 def index():
-    hackathons = db(db.hackathon).select(limitby=(0, 10))
+    search_term = request.query.get("search", "").strip()
+    query = db.hackathon.name.contains(search_term) if search_term else db.hackathon
+    hackathons = db(query).select(limitby=(0, 10))
     return dict(
         title="Find your next Hackathon",
         hackathons=hackathons,
         is_admin="admin" in groups.get(auth.user_id),
+        search_term=search_term,
     )
 
 
