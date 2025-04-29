@@ -36,7 +36,7 @@ class TestScrapers(unittest.TestCase):
             (get_hackathon, "https://www.pushquantum.tech/pq-hackathon"),
             (get_hackathon, "https://hackathon.radiology.bayer.com/"),
             (get_hackathon, "https://www.hackbay.de/"),
-            (unternehmertum, "https://unternehmertum.de"),
+            (unternehmertum, "https://www.unternehmertum.de"),
         ]
     )
     @patch("direct_scraper.requests.get")
@@ -70,7 +70,7 @@ class TestScrapers(unittest.TestCase):
 
     @parameterized.expand(
         [
-            (taikai_network, "taikai.network"),
+            (taikai_network, "api.taikai.network"),
         ]
     )
     @patch("direct_scraper.requests.post")
