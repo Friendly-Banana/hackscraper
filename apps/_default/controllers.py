@@ -39,7 +39,7 @@ from .common import T, auth, db, groups, flash, session, scheduler, PrimaryFormS
 def index():
     search_term = request.query.get("search", "").strip()
     query = db.hackathon.name.contains(search_term) if search_term else db.hackathon
-    hackathons = db(query).select(limitby=(0, 10))
+    hackathons = db(query).select(limitby=(0, 50))
     return dict(
         title="Find your next Hackathon",
         hackathons=hackathons,
