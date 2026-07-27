@@ -15,12 +15,14 @@ admin_mail = System.get_env("ADMIN_MAIL")
 admin_pwd = System.get_env("ADMIN_PWD")
 
 if admin_mail && admin_pwd do
-  case HackScraper.Accounts.register_user_with_role(%{
-         name: "admin",
-         email: admin_mail,
-         password: admin_pwd,
-         role: :admin
-       }) do
+  case HackScraper.Accounts.register_user_with_role(
+         %{
+           name: "admin",
+           email: admin_mail,
+           password: admin_pwd
+         },
+         :admin
+       ) do
     {:ok, _user} ->
       Logger.info("Created superuser: #{admin_mail}")
 

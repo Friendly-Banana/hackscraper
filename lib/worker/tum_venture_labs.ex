@@ -99,18 +99,24 @@ defmodule HackScraper.Worker.TUMVentureLabs.AddInfo do
   defp extract_best_image(html) do
     img = Floki.find(html, ".header-split-image img")
 
-    with srcset when srcset != [] <- Floki.attribute(img, "srcset"),
-         srcset_str when is_binary(srcset_str) <- List.first(srcset) do
-      srcset_str
-      |> String.split(",")
-      |> Enum.map(fn entry ->
-        [url, width] = entry |> String.trim() |> String.split(" ", parts: 2)
-        {String.to_integer(String.trim_trailing(width, "w")), url}
-      end)
-      |> Enum.max_by(&elem(&1, 0))
-      |> elem(1)
+    with [srcset | _] <- Floki.attribute(img, "srcset"),
+         parsed when parsed != [] <- parse_srcset(srcset) do
+      parsed |> Enum.max_by(&elem(&1, 0)) |> elem(1)
     else
-      _ -> Floki.attribute(img, "src") |> List.first()
+      _ -> img |> Floki.attribute("src") |> List.first()
+    end
+  end
+
+  defp parse_srcset(srcset) do
+    for entry <- String.split(srcset, ","),
+        [url | rest] = String.split(entry, ~r/\s+/, trim: true) do
+      width =
+        case rest do
+          [desc | _] -> case Integer.parse(desc) do {w, _} -> w; _ -> 0 end
+          _ -> 0
+        end
+
+      {width, url}
     end
   end
 end
