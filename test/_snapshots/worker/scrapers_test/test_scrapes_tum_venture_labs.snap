@@ -5,8 +5,8 @@
        "event" => %{
          name: "AEC/O Hackathon 2025 Munich Edition",
          url: "https://www.tum-venture-labs.de/events/aeco-hackathon-2025/",
-         series_id: nil,
-         date_hint: "Friday, November 21, 2025"
+         date_hint: "Friday, November 21, 2025",
+         series_id: nil
        },
        "worker_name" => "TUMVentureLabs.AddInfo"
      },
@@ -20,8 +20,8 @@
        keys: [:event],
        period: 5184000,
        fields: [:queue, :args],
-       states: [:scheduled, :available, :executing, :retryable, :completed,
-        :discarded, :cancelled]
+       states: [:suspended, :scheduled, :available, :executing, :retryable,
+        :completed, :discarded, :cancelled]
      }
    },
    %{
@@ -29,8 +29,8 @@
        "event" => %{
          name: "Global Sustainability Challenge",
          url: "https://www.tum-venture-labs.de/events/global-sustainability-challenge/",
-         series_id: nil,
-         date_hint: "Monday, November 3, 2025"
+         date_hint: "Monday, November 3, 2025",
+         series_id: nil
        },
        "worker_name" => "TUMVentureLabs.AddInfo"
      },
@@ -44,8 +44,8 @@
        keys: [:event],
        period: 5184000,
        fields: [:queue, :args],
-       states: [:scheduled, :available, :executing, :retryable, :completed,
-        :discarded, :cancelled]
+       states: [:suspended, :scheduled, :available, :executing, :retryable,
+        :completed, :discarded, :cancelled]
      }
    },
    %{
@@ -53,8 +53,8 @@
        "event" => %{
          name: "Munich Defense Systems Hack",
          url: "https://www.tum-venture-labs.de/events/munich-defense-systems-hack/",
-         series_id: nil,
-         date_hint: "Friday, May 30, 2025"
+         date_hint: "Friday, May 30, 2025",
+         series_id: nil
        },
        "worker_name" => "TUMVentureLabs.AddInfo"
      },
@@ -68,8 +68,8 @@
        keys: [:event],
        period: 5184000,
        fields: [:queue, :args],
-       states: [:scheduled, :available, :executing, :retryable, :completed,
-        :discarded, :cancelled]
+       states: [:suspended, :scheduled, :available, :executing, :retryable,
+        :completed, :discarded, :cancelled]
      }
    },
    %{
@@ -77,8 +77,8 @@
        "event" => %{
          name: "THE POOL – Co-Founder Matching Hackathon",
          url: "https://www.tum-venture-labs.de/events/the-pool-co-founder-matching-hackathon/",
-         series_id: nil,
-         date_hint: "Monday, April 7, 2025"
+         date_hint: "Monday, April 7, 2025",
+         series_id: nil
        },
        "worker_name" => "TUMVentureLabs.AddInfo"
      },
@@ -92,8 +92,8 @@
        keys: [:event],
        period: 5184000,
        fields: [:queue, :args],
-       states: [:scheduled, :available, :executing, :retryable, :completed,
-        :discarded, :cancelled]
+       states: [:suspended, :scheduled, :available, :executing, :retryable,
+        :completed, :discarded, :cancelled]
      }
    },
    %{
@@ -101,8 +101,8 @@
        "event" => %{
          name: "robo.innovate Hackathon 2025",
          url: "https://www.tum-venture-labs.de/events/robo-innovate-hackathon-2025/",
-         series_id: nil,
-         date_hint: "Monday, March 17, 2025"
+         date_hint: "Monday, March 17, 2025",
+         series_id: nil
        },
        "worker_name" => "TUMVentureLabs.AddInfo"
      },
@@ -116,8 +116,8 @@
        keys: [:event],
        period: 5184000,
        fields: [:queue, :args],
-       states: [:scheduled, :available, :executing, :retryable, :completed,
-        :discarded, :cancelled]
+       states: [:suspended, :scheduled, :available, :executing, :retryable,
+        :completed, :discarded, :cancelled]
      }
    },
    %{
@@ -125,8 +125,8 @@
        "event" => %{
          name: "European Defense Tech Hackathon",
          url: "https://www.tum-venture-labs.de/events/european-defense-tech-hackathon/",
-         series_id: nil,
-         date_hint: "Thursday, February 13, 2025"
+         date_hint: "Thursday, February 13, 2025",
+         series_id: nil
        },
        "worker_name" => "TUMVentureLabs.AddInfo"
      },
@@ -140,8 +140,8 @@
        keys: [:event],
        period: 5184000,
        fields: [:queue, :args],
-       states: [:scheduled, :available, :executing, :retryable, :completed,
-        :discarded, :cancelled]
+       states: [:suspended, :scheduled, :available, :executing, :retryable,
+        :completed, :discarded, :cancelled]
      }
    },
    %{
@@ -149,8 +149,8 @@
        "event" => %{
          name: "AEC Hackathon Munich Edition",
          url: "https://www.tum-venture-labs.de/events/aec-hackathon-munich-edition/",
-         series_id: nil,
-         date_hint: "Friday, November 22, 2024"
+         date_hint: "Friday, November 22, 2024",
+         series_id: nil
        },
        "worker_name" => "TUMVentureLabs.AddInfo"
      },
@@ -164,8 +164,8 @@
        keys: [:event],
        period: 5184000,
        fields: [:queue, :args],
-       states: [:scheduled, :available, :executing, :retryable, :completed,
-        :discarded, :cancelled]
+       states: [:suspended, :scheduled, :available, :executing, :retryable,
+        :completed, :discarded, :cancelled]
      }
    },
    %{
@@ -173,8 +173,8 @@
        "event" => %{
          name: "Alt Protein Pipelines: Hackathons as innovation and career catalysts",
          url: "https://www.tum-venture-labs.de/events/alt-protein-innovation-hackathon/",
-         series_id: nil,
-         date_hint: "Tuesday, October 1, 2024"
+         date_hint: "Tuesday, October 1, 2024",
+         series_id: nil
        },
        "worker_name" => "TUMVentureLabs.AddInfo"
      },
@@ -188,8 +188,8 @@
        keys: [:event],
        period: 5184000,
        fields: [:queue, :args],
-       states: [:scheduled, :available, :executing, :retryable, :completed,
-        :discarded, :cancelled]
+       states: [:suspended, :scheduled, :available, :executing, :retryable,
+        :completed, :discarded, :cancelled]
      }
    },
    %{
@@ -197,8 +197,8 @@
        "event" => %{
          name: "Bite-sized Innovations: Hacking the Future of Alternative Protein",
          url: "https://www.tum-venture-labs.de/events/bite-sized-innovations-hacking-the-future-of-alternative-protein/",
-         series_id: nil,
-         date_hint: "Thursday, June 20, 2024"
+         date_hint: "Thursday, June 20, 2024",
+         series_id: nil
        },
        "worker_name" => "TUMVentureLabs.AddInfo"
      },
@@ -212,8 +212,8 @@
        keys: [:event],
        period: 5184000,
        fields: [:queue, :args],
-       states: [:scheduled, :available, :executing, :retryable, :completed,
-        :discarded, :cancelled]
+       states: [:suspended, :scheduled, :available, :executing, :retryable,
+        :completed, :discarded, :cancelled]
      }
    },
    %{
@@ -221,8 +221,8 @@
        "event" => %{
          name: "MakeaTUM Bionics Hackathon",
          url: "https://www.tum-venture-labs.de/events/makeatum-bionics-hackathon-2/",
-         series_id: nil,
-         date_hint: "Wednesday, April 24, 2024"
+         date_hint: "Wednesday, April 24, 2024",
+         series_id: nil
        },
        "worker_name" => "TUMVentureLabs.AddInfo"
      },
@@ -236,8 +236,8 @@
        keys: [:event],
        period: 5184000,
        fields: [:queue, :args],
-       states: [:scheduled, :available, :executing, :retryable, :completed,
-        :discarded, :cancelled]
+       states: [:suspended, :scheduled, :available, :executing, :retryable,
+        :completed, :discarded, :cancelled]
      }
    }
  ]}

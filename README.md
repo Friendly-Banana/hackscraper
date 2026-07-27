@@ -17,3 +17,11 @@ To start your Phoenix server:
   * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+
+
+### Updating test snapshots
+
+
+```sh
+EXPOSURE_OVERRIDE=true mix test
+```

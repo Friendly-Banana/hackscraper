@@ -6,7 +6,7 @@
      location: "Arcisstr, 21, Munich",
      image: "https://www.tum-venture-labs.de/transforms/images/Events/_1450x1450_crop_center-center_90_none/96900/241105_AEC-Hackathon-website.webp?v=1763990341",
      url: "https://www.eventbrite.de/e/aec-hackathon-munich-edition-tickets-953378860837",
-     series_id: nil,
-     date_hint: "Jun 20 - 22, 2025"
+     date_hint: "Jun 20 - 22, 2025",
+     series_id: nil
    }
  ]}

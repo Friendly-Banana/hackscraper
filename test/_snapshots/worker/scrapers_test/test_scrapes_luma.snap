@@ -21,8 +21,8 @@
        keys: [:event],
        period: 5184000,
        fields: [:queue, :args],
-       states: [:scheduled, :available, :executing, :retryable, :completed,
-        :discarded, :cancelled]
+       states: [:suspended, :scheduled, :available, :executing, :retryable,
+        :completed, :discarded, :cancelled]
      }
    },
    %{
@@ -46,8 +46,8 @@
        keys: [:event],
        period: 5184000,
        fields: [:queue, :args],
-       states: [:scheduled, :available, :executing, :retryable, :completed,
-        :discarded, :cancelled]
+       states: [:suspended, :scheduled, :available, :executing, :retryable,
+        :completed, :discarded, :cancelled]
      }
    }
  ]}
