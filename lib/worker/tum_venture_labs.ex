@@ -108,15 +108,27 @@ defmodule HackScraper.Worker.TUMVentureLabs.AddInfo do
   end
 
   defp parse_srcset(srcset) do
-    for entry <- String.split(srcset, ","),
-        [url | rest] = String.split(entry, ~r/\s+/, trim: true) do
-      width =
-        case rest do
-          [desc | _] -> case Integer.parse(desc) do {w, _} -> w; _ -> 0 end
-          _ -> 0
-        end
+    srcset
+    |> String.split(",")
+    |> Enum.flat_map(fn entry ->
+      case String.split(entry, ~r/\s+/, trim: true) do
+        [url | rest] ->
+          width =
+            case rest do
+              [desc | _] ->
+                case Integer.parse(desc) do
+                  {w, _} -> w
+                  _ -> 0
+                end
 
-      {width, url}
-    end
+              _ -> 0
+            end
+
+          [{width, url}]
+
+        [] ->
+          []
+      end
+    end)
   end
 end

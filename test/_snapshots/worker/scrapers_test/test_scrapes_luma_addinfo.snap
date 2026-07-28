@@ -1,13 +1,26 @@
-{:hackathons,
- [
-   %{
-     name: "European Defense Tech Hackathon – Munich",
-     description: "Time to Accelerate European Defense Innovation\nThe mission continues: at the same time as the Munich Security Conference, we'll be organizing once again Europe's largest defense tech hackathon:\nJoin us and 200+ hackers from all across Europe and beyond for the European Defense Tech Hackathon on February 12-15, 2026, in Munich.\nConnect with fellow defense innovators, find a co-founder, and develop solutions that will eventually save lives!\nGoal",
-     location: nil,
-     image: "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=1,anim=false,background=white,quality=75,width=1920,height=1920/event-covers/g1/6944a064-249e-4d55-9a23-16115185a273.jpg",
-     url: "https://luma.com/edth-2026-munich",
-     start_date: ~U[2026-02-12 11:00:00Z],
-     end_date: ~U[2026-02-15 17:00:00Z],
-     series_id: nil
-   }
- ]}
+[
+  hackathons: [
+    %{
+      name: "Build different (Hackathon)",
+      description: "Where your ideas meet people who can build them.\nWe’re hosting a small builder sprint in a bright industrial loft in Munich, the kind of place where early startups accidentally begin.\nIn 3 hours we build something small but real: a tool, a prototype, a micro-product, whatever you’re excited about.\nSolo or with people you meet on the spot.\nLight chaos. Good energy. Zero pressure.",
+      location: "Lochhamer Schlag 11A",
+      image: "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=1,anim=false,background=white,quality=75,width=1920,height=1920/event-covers/2d/3f68c330-7bc2-492f-a306-765b93521ce3.jpg",
+      url: "https://luma.com/tsohl33j",
+      start_date: ~U[2025-12-13 14:00:00Z],
+      end_date: ~U[2025-12-13 19:00:00Z],
+      series_id: nil
+    }
+  ],
+  hackathons: [
+    %{
+      name: "European Defense Tech Hackathon – Munich",
+      description: "Time to Accelerate European Defense Innovation\nThe mission continues: at the same time as the Munich Security Conference, we'll be organizing once again Europe's largest defense tech hackathon:\nJoin us and 200+ hackers from all across Europe and beyond for the European Defense Tech Hackathon on February 12-15, 2026, in Munich.\nConnect with fellow defense innovators, find a co-founder, and develop solutions that will eventually save lives!\nGoal",
+      location: nil,
+      image: "https://images.lumacdn.com/cdn-cgi/image/format=auto,fit=cover,dpr=1,anim=false,background=white,quality=75,width=1920,height=1920/event-covers/g1/6944a064-249e-4d55-9a23-16115185a273.jpg",
+      url: "https://luma.com/edth-2026-munich",
+      start_date: ~U[2026-02-12 11:00:00Z],
+      end_date: ~U[2026-02-15 17:00:00Z],
+      series_id: nil
+    }
+  ]
+]

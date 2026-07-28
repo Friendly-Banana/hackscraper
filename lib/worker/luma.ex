@@ -96,18 +96,13 @@ defmodule HackScraper.Worker.Luma.AddInfo do
         _ -> nil
       end
 
-    event_atoms =
-      for {key, val} <- event,
-          into: %{},
-          do: {String.to_existing_atom(key), val}
-
     hackathon =
-      event_atoms
+      %{url: event["url"], name: event["name"], series_id: event["series_id"]}
       |> Map.put(:description, description)
       |> Map.put(:location, location)
       |> Map.put(:image, image)
-      |> Map.put(:start_date, parse_date(event_atoms[:start_date] || json_ld["startDate"]))
-      |> Map.put(:end_date, parse_date(event_atoms[:end_date] || json_ld["endDate"]))
+      |> Map.put(:start_date, parse_date(event["start_date"] || json_ld["startDate"]))
+      |> Map.put(:end_date, parse_date(event["end_date"] || json_ld["endDate"]))
 
     {:hackathons, [hackathon]}
   end
