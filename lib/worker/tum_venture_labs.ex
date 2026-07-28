@@ -121,7 +121,8 @@ defmodule HackScraper.Worker.TUMVentureLabs.AddInfo do
                   _ -> 0
                 end
 
-              _ -> 0
+              _ ->
+                0
             end
 
           [{width, url}]
